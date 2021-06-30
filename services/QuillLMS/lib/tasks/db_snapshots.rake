@@ -100,7 +100,8 @@ namespace :db do
         activities: "(SELECT id,name,description,uid,data->'flag' AS data_flag,data->'title' AS data_title,activity_classification_id,topic_id,created_at,updated_at,flags[1] AS flag, repeatable,follow_up_activity_id,supporting_info,standard_id,raw_score_id FROM activities)",
         users: "(SELECT id,role,created_at,updated_at,classcode,active,username,token,clever_id,signed_up_with_google,send_newsletter,google_id,last_sign_in,last_active,stripe_customer_id,flags,time_zone,title,account_type,post_google_classroom_assignments FROM users)",
         activity_sessions: "(SELECT id,classroom_activity_id,activity_id,user_id,pairing_id,percentage,state,completed_at, uid,temporary,created_at, updated_at, started_at,is_retry,is_final_score,visible,classroom_unit_id,timespent FROM activity_sessions)",
-        schools: "(SELECT id, nces_id,lea_id,leanm,name,mail_street,mail_city,mail_state,mail_zipcode, street,city,state,zipcode,magnet,charter,ethnic_group,longitude,latitude,ulocal,fte_classroom_teacher,lower_grade,upper_grade,school_level,free_lunches,total_students,created_at,updated_at,clever_id,ppin,authorizer_id,coordinator_id FROM schools)"
+        schools: "(SELECT id, nces_id,lea_id,leanm,name,mail_street,mail_city,mail_state,mail_zipcode, street,city,state,zipcode,magnet,charter,ethnic_group,longitude,latitude,ulocal,fte_classroom_teacher,lower_grade,upper_grade,school_level,free_lunches,total_students,created_at,updated_at,clever_id,ppin,authorizer_id,coordinator_id FROM schools)",
+        unit_templates: "(SELECT id, name, unit_template_category_id,time,author_id,flag,order_number,created_at,updated_at,image_link FROM unit_templates)"
       }
     end
   end
