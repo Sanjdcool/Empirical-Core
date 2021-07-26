@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as _ from 'underscore';
+import stripHtml from "string-strip-html";
 import { RouteComponentProps } from 'react-router-dom'
 import { useQuery } from 'react-query';
 import { firstBy } from "thenby";
@@ -127,6 +128,7 @@ const ChangeLog = ({ history, match }) => {
       key: "dateTime",
       sortMethod: sort,
       width: 160,
+      Cell: cell => (new Date(cell.original.dateTime).toLocaleString())
     },
     {
       Header: 'Action',
@@ -162,6 +164,7 @@ const ChangeLog = ({ history, match }) => {
       key: "previousValue",
       sortMethod: sort,
       width: 200,
+      Cell: cell => cell.original.previousValue ? (stripHtml(cell.original.previousValue)) : ''
     },
     {
       Header: 'New Value',
@@ -169,6 +172,7 @@ const ChangeLog = ({ history, match }) => {
       key: "newValue",
       sortMethod: sort,
       width: 200,
+      Cell: cell => cell.original.newValue ? (stripHtml(cell.original.newValue)) : ''
     },
     {
       Header: 'Author',
@@ -241,7 +245,7 @@ const ChangeLog = ({ history, match }) => {
       </div>
       <br />
       {formattedRows && (<ReactTable
-        className="activity-stats-table"
+        className="change-log-table"
         columns={dataTableFields}
         data={filteredRows || []}
         defaultPageSize={filteredRows.length}
