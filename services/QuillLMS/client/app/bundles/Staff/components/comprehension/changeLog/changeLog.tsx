@@ -83,7 +83,6 @@ const ChangeLog = ({ history, match }) => {
 
     const changedRecord = `${record_type_display_name} - ${changed_record_id}`
 
-    console.log(log)
     return {
       action: comprehension_action,
       changedRecord: changedRecord,
