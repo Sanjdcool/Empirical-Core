@@ -2,7 +2,7 @@ require "google/cloud/automl"
 
 
 module Comprehension
-  class AutomlModel < ActiveRecord::Base
+  class AutomlModel < ApplicationRecord
     include Comprehension::ChangeLog
     MIN_LABELS_LENGTH = 1
     STATES = [
@@ -77,6 +77,10 @@ module Comprehension
 
     def url
       "comprehension/#/activities/#{prompt.activity.id}/semantic-labels/model/#{id}"
+    end
+
+    def comprehension_name
+      name
     end
 
     private def prompt_automl_rules

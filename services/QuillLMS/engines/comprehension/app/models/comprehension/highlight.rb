@@ -1,7 +1,7 @@
 module Comprehension
-  class Highlight < ActiveRecord::Base
+  class Highlight < ApplicationRecord
     include Comprehension::ChangeLog
-
+    
     MIN_TEXT_LENGTH = 1
     MAX_TEXT_LENGTH = 5000
     TYPES= [
@@ -40,6 +40,14 @@ module Comprehension
 
     def url
       feedback.rule.url
+    end
+
+    def comprehension_name
+      feedback.rule.name
+    end
+
+    def conjunctions
+      feedback.rule.prompts.map(&:conjunction)
     end
 
     private def semantic_rule

@@ -1,8 +1,7 @@
 module Comprehension
-  class Feedback < ActiveRecord::Base
+  class Feedback < ApplicationRecord
     include Comprehension::ChangeLog
-
-    MIN_FEEDBACK_LENGTH = 10
+    MIN_FEEDBACK_LENGTH = 10 
     MAX_FEEDBACK_LENGTH = 500
 
     belongs_to :rule, inverse_of: :feedbacks
@@ -39,6 +38,14 @@ module Comprehension
 
     def url
       rule.url
+    end
+
+    def comprehension_name
+      rule.name
+    end
+
+    def conjunctions
+      rule.prompts.map(&:conjunction)
     end
 
     private def semantic_rule

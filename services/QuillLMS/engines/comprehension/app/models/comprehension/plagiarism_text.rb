@@ -1,5 +1,5 @@
 module Comprehension
-  class PlagiarismText < ActiveRecord::Base
+  class PlagiarismText < ApplicationRecord
     include Comprehension::ChangeLog
 
     belongs_to :rule, inverse_of: :plagiarism_text
@@ -20,6 +20,14 @@ module Comprehension
 
     def url
       rule.url
+    end
+
+    def comprehension_name
+      rule.name
+    end
+
+    def conjunctions
+      rule.prompts.map(&:conjunction)
     end
   end
 end

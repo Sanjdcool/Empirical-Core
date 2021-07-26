@@ -1,7 +1,7 @@
 module Comprehension
-  class Prompt < ActiveRecord::Base
+  class Prompt < ApplicationRecord
     include Comprehension::ChangeLog
-
+    
     MIN_TEXT_LENGTH = 10
     MAX_TEXT_LENGTH = 255
     CONJUNCTIONS = %w(because but so)
@@ -38,6 +38,10 @@ module Comprehension
 
     def url
       activity.url
+    end
+
+    def conjunctions
+      [conjunction]
     end
 
     private def downcase_conjunction

@@ -1,5 +1,5 @@
 module Comprehension
-  class RegexRule < ActiveRecord::Base
+  class RegexRule < ApplicationRecord
     include Comprehension::ChangeLog
 
     DEFAULT_CASE_SENSITIVITY = true
@@ -46,6 +46,14 @@ module Comprehension
       rule.url
     end
 
+    def comprehension_name
+      rule.name
+    end
+
+    def conjunctions
+      rule.prompts.map(&:conjunction)
+    end
+
     private def regex_match(entry)
       case_sensitive? ? Regexp.new(regex_text).match(entry) : Regexp.new(regex_text, Regexp::IGNORECASE).match(entry)
     end
@@ -60,7 +68,7 @@ module Comprehension
         Regexp.new(regex_text)
       rescue RegexpError => e
         rule.errors.add(:invalid_regex, e.to_s)
-        false
+        throw(:abort)
       end
     end
 

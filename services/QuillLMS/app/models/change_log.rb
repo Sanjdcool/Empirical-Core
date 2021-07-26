@@ -23,7 +23,7 @@
 #
 #  fk_rails_...  (user_id => users.id)
 #
-class ChangeLog < ActiveRecord::Base
+class ChangeLog < ApplicationRecord
   RENAMED = 'Renamed'
   UNARCHIVED = 'Unarchived'
   ARCHIVED = 'Archived'
@@ -72,33 +72,6 @@ class ChangeLog < ActiveRecord::Base
     delete: 'deleted',
     update: 'updated',
     activate_automl: 'activated'
-    # create_activity: 'Comprehension Activity - created',
-    # delete_activity: 'Comprehension Activity - deleted',
-    # update_passage: 'Comprehension Passage Text - updated',
-    # create_regex: 'Regex Rule - created',
-    # update_regex: 'Regex Rule - updated',
-    # delete_regex: 'Regex Rule - deleted',
-    # update_regex_feedback: 'Regex Rule Feedback - updated',
-    # update_regex_highlight: 'Regex Rule Highlight - updated',
-    # update_regex_text: 'Regex Rule Regex - updated',
-    # update_prompt: 'Comprehension Stem - updated',
-    # create_automl: 'AutoML Model - created',
-    # activate_automl: 'AutoML Model - activated',
-    # deactivate_automl: 'AutoML Model - de-activated',
-    # create_semantic: 'Semantic Label - created',
-    # delete_semantic: 'Semantic Label - deleted',
-    # update_semantic: 'Semantic Label - updated',
-    # update_feedback_1: 'Semantic Label First Layer Feedback - updated',
-    # update_highlight_1: 'Semantic Label First Layer Feedback Highlight - updated',
-    # update_feedback_2: 'Semantic Label Second Layer Feedback - updated',
-    # update_highlight_2: 'Semantic Label Second Layer Feedback Highlight - updated',
-    # create_plagiarism: 'Plagiarism Rule - created',
-    # update_plagiarism: 'Plagiarism Rule - updated',
-    # update_plagiarism_feedback: 'Plagiarism Rule Feedback - updated',
-    # update_plagiarism_highlight: 'Plagiarism Rule Highlight - updated',
-    # update_plagiarism_text: 'Plagiarism Rule Text - updated',
-    # update_universal: 'Universal Rule - updated',
-    # create_universal: 'Universal Rule - created'
   }
   CHANGED_RECORD_TYPES = [
     'Concept',
@@ -176,15 +149,31 @@ class ChangeLog < ActiveRecord::Base
     super(options.reverse_merge(
       only: [:id, :action, :changed_attribute, :changed_record_type, :changed_record_id,
              :explanation, :new_value, :previous_value, :created_at, :updated_at, :user_id],
-      methods: [:comprehension_action, :comprehension_url]
+      methods: [:comprehension_action, :comprehension_url, :comprehension_name, :conjunctions, :user, :updated_local_time]
     ))
   end
 
   def comprehension_action
-    "#{changed_record.change_log_name} - #{action}"
+    "#{changed_record&.change_log_name} - #{action}" if changed_record&.respond_to? :change_log_name
   end
 
   def comprehension_url
-    changed_record.url
+    changed_record&.url if changed_record&.respond_to? :url
+  end
+
+  def comprehension_name
+    changed_record&.comprehension_name if changed_record&.respond_to? :comprehension_name
+  end
+
+  def conjunctions
+    changed_record&.conjunctions if changed_record&.respond_to? :conjunctions
+  end
+
+  def user
+    User.find_by(id: user_id)&.name
+  end
+
+  def updated_local_time
+    updated_at.localtime.to_s
   end
 end
