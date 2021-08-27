@@ -35,7 +35,12 @@ const captureSentryMessage = (message) => {
 dotenv.config();
 
 const app = http.createServer(requestHandler);
-const io = socketio(app);
+const io = socketio(app, {
+  cors: {
+    origin: ['quill.org', /https:\/\/(.)*.quill.org/, /localhost:.*/, /127.0.0.1:.*/],
+    methods: ["GET", "POST"]
+  }
+});
 io.adapter(redis(process.env.REDISTOGO_URL));
 const port = process.env.PORT;
 
@@ -674,4 +679,3 @@ app.on('error', err => {
 });
 
 app.listen(port, () => {});
-
