@@ -37,7 +37,9 @@ dotenv.config();
 const app = http.createServer(requestHandler);
 const io = socketio(app);
 io.adapter(redis(process.env.REDISTOGO_URL));
-io.origins(['quill.org', /https:\/\/(.)*.quill.org/, /localhost:.*/, /127.0.0.1:.*/])
+io.origins((_, callback) => {
+  callback(null, true);
+});
 const port = process.env.PORT;
 
 import {
