@@ -41,9 +41,6 @@ import {
   VISIBILITYCHANGE
 } from '../../../Shared/index'
 
-const bigCheckSrc =  `${process.env.CDN_URL}/images/icons/check-circle-big.svg`
-const tadaSrc =  `${process.env.CDN_URL}/images/illustrations/tada.svg`
-
 interface StudentViewContainerProps {
   dispatch: Function;
   activities: ActivitiesReducerState;
@@ -108,8 +105,63 @@ export const StudentViewContainer = ({ dispatch, activities, session, location, 
     4: 0
   });
 
+  function getUrlParam(paramName: string) {
+    if(isTurk) {
+      return getParameterByName(paramName, window.location.href)
+    }
+    const { search, } = location
+    if (!search) { return }
+    return queryString.parse(search)[paramName]
+  }
+
+  function getActivityUID() {
+    return getUrlParam('uid')
+  }
+
+  function specifiedActivitySessionUID() {
+    return getUrlParam('session')
+  }
+
+  function loadPreviousSession(data: any) {
+    const highlights = data.studentHighlights || studentHighlights
+    // if the student hasn't gotten to the highlighting stage yet,
+    // we don't want them to skip seeing the directions modal and reading the passage again
+    const studentHasAtLeastStartedHighlighting = highlights && highlights.length
+
+    const newState = {
+      activeStep: data.activeStep || activeStep,
+      completedSteps: data.completedSteps || completedSteps,
+      timeTracking: data.timeTracking || timeTracking,
+      studentHighlights: highlights,
+      hasStartedReadPassageStep: studentHasAtLeastStartedHighlighting,
+      scrolledToEndOfPassage: studentHasAtLeastStartedHighlighting,
+      doneHighlighting: studentHasAtLeastStartedHighlighting && highlights.length >= MINIMUM_STUDENT_HIGHLIGHT_COUNT
+    }
+
+    setActiveStep(newState.activeStep)
+    setCompletedSteps(newState.completedSteps)
+    setTimeTracking(newState.timeTracking);
+    setStudentHighlights(newState.studentHighlights);
+    setHasStartedReadPassageStep(newState.hasStartedReadPassageStep);
+    setScrolledToEndOfPassage(newState.scrolledToEndOfPassage);
+    setDoneHighlighting(newState.doneHighlighting);
+    activateStep(newState.activeStep, null, true)
+  }
+
+  function activateStep(step?: number, callback?: Function, skipTracking?: boolean) {
+    // don't activate a step if it's already active
+    if (activeStep == step) return
+    // don't activate steps before Done reading button has been clicked
+    if (step && step > 1 && !completedSteps.includes(READ_PASSAGE_STEP)) return
+
+    this.setState({ activeStep: step, startTime: Date.now(), }, () => {
+      if (!skipTracking) this.trackCurrentPromptStartedEvent()
+      if (callback) { callback() }
+    })
+  }
+
   React.useEffect(() => {
-    const activityUID = activityUID()
+    const activityUID = getActivityUID()
     const sessionFromUrl = specifiedActivitySessionUID()
     if (sessionFromUrl) {
       const fetchActiveActivitySessionArgs = {
