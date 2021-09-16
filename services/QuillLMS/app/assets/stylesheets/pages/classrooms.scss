@@ -17,6 +17,10 @@
     }
   }
 
+  .show-overflow {
+    overflow: visible !important;
+  }
+
   .name, .last-name, .first-name {
     &.inactive:not(.has-text) {
       label {

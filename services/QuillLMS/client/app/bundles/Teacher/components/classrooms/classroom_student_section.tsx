@@ -7,7 +7,7 @@ import MergeStudentAccountsModal from './merge_student_accounts_modal'
 import MoveStudentsModal from './move_students_modal'
 import RemoveStudentsModal from './remove_students_modal'
 
-import { DropdownInput, DataTable } from '../../../Shared/index'
+import { DropdownInput, DataTable, Tooltip } from '../../../Shared/index'
 
 const emptyDeskSrc = `${process.env.CDN_URL}/images/illustrations/empty-desks.svg`
 const bulbSrc = `${process.env.CDN_URL}/images/illustrations/bulb.svg`
@@ -26,7 +26,9 @@ const activeHeaders = [
   }, {
     width: '124px',
     name: 'Synced',
-    attribute: 'synced'
+    attribute: 'synced',
+    rowSectionClassName: 'show-overflow',
+    noTooltip: true
   }, {
     name: 'Actions',
     attribute: 'actions',
@@ -416,7 +418,7 @@ export default class ClassroomStudentSection extends React.Component<ClassroomSt
       if (google_id) { synced = 'Google Classroom'}
       if (clever_id) { synced = 'Clever' }
       return {
-        synced,
+        synced: <Tooltip tooltipText="Here's all the extra info" tooltipTriggerText="Tooltip" />,
         name,
         id,
         username,
