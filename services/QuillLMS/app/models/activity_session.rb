@@ -60,6 +60,7 @@ class ActivitySession < ApplicationRecord
   has_many :concept_results
   has_many :teachers, through: :classroom
   has_many :concepts, -> { distinct }, through: :concept_results
+  has_one :active_activity_session, foreign_key: :uid, primary_key: :uid
 
   validate :correctly_assigned, :on => :create
 
@@ -71,7 +72,7 @@ class ActivitySession < ApplicationRecord
   before_save   :set_completed_at, :set_activity_id
 
   after_save    :determine_if_final_score, :update_milestones, :increment_counts
-  after_save :record_teacher_activity_feed, if: [:completed_at_changed?, :completed?]
+  after_save :record_teacher_activity_feed, if: [:saved_change_to_completed_at?, :completed?]
 
   after_commit :invalidate_activity_session_count_if_completed
 
@@ -151,7 +152,7 @@ class ActivitySession < ApplicationRecord
   end
 
   def self.calculate_timespent(time_tracking)
-    time_tracking&.values&.sum
+    time_tracking&.values&.compact&.sum
   end
 
   def eligible_for_tracking?
@@ -547,11 +548,9 @@ class ActivitySession < ApplicationRecord
   end
 
   private def trigger_events
-    should_async = state_changed?
-
     yield # http://stackoverflow.com/questions/4998553/rails-around-callbacks
 
-    return unless should_async
+    return unless saved_change_to_state?
 
     if state == 'finished'
       FinishActivityWorker.perform_async(uid)

@@ -24,7 +24,7 @@ describe Cms::SchoolsController do
     it 'should allows staff memeber to view and search through school' do
       get :index
       expect(assigns(:school_search_query)).to eq({'search_schools_with_zero_teachers' => true})
-      expect(assigns(:school_search_query_results)).to eq [school_hash]
+      expect(assigns(:school_search_query_results)).to eq []
       expect(assigns(:number_of_pages)).to eq 0
     end
   end
@@ -59,7 +59,8 @@ describe Cms::SchoolsController do
        'District' => school.leanm,
        'Free and Reduced Price Lunch' => "#{school.free_lunches}%",
        'NCES ID' => school.nces_id,
-       'PPIN' => school.ppin
+       'PPIN' => school.ppin,
+       'Clever ID' => school.clever_id
       })
       expect(assigns(:teacher_data)).to eq "teacher data"
       expect(assigns(:admins)).to eq(SchoolsAdmins.includes(:user).where(school_id: school.id).map do |admin|
@@ -87,7 +88,8 @@ describe Cms::SchoolsController do
           'School ZIP' => :zipcode,
           'District Name' => :leanm,
           'FRP Lunch' => :free_lunches,
-          'NCES ID' => :nces_id
+          'NCES ID' => :nces_id,
+          'Clever ID' => :clever_id
       })
     end
   end

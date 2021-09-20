@@ -5,14 +5,14 @@ import { firstBy } from "thenby";
 import ReactTable from 'react-table';
 import qs from 'qs';
 import _ from 'lodash';
-import DateTimePicker from 'react-datetime-picker';
 
+import FilterWidget from "../shared/filterWidget";
 import { handlePageFilterClick, renderHeader } from "../../../helpers/evidence";
 import { calculatePercentageForResponses } from "../../../helpers/evidence/ruleHelpers";
 import { ActivityRouteProps, PromptInterface, InputEvent } from '../../../interfaces/evidenceInterfaces';
 import { fetchActivity } from '../../../utils/evidence/activityAPIs';
 import { fetchRuleFeedbackHistories } from '../../../utils/evidence/ruleFeedbackHistoryAPIs';
-import { DropdownInput, Input, Spinner } from '../../../../Shared/index';
+import { DropdownInput, Spinner } from '../../../../Shared/index';
 import { RULES_ANALYSIS } from '../../../../../constants/evidence';
 
 const DEFAULT_RULE_TYPE = 'All Rules'
@@ -82,6 +82,7 @@ const RulesAnalysis: React.FC<RouteComponentProps<ActivityRouteProps>> = ({ hist
   const [formattedRows, setFormattedRows] = React.useState<any[]>(null);
 
   const selectedConjunction = selectedPrompt ? selectedPrompt.conjunction : promptConjunction
+
   // cache rules data for updates
   const { data: ruleFeedbackHistory } = useQuery({
     queryKey: [`rule-feedback-history-by-conjunction-${selectedConjunction}-and-activity-${activityId}`, activityId, selectedConjunction, startDateForQuery, endDateForQuery, turkSessionIDForQuery],
@@ -115,7 +116,6 @@ const RulesAnalysis: React.FC<RouteComponentProps<ActivityRouteProps>> = ({ hist
     if (selectedPrompt) {
       url += `/${selectedPrompt.conjunction}`
     }
-
     if (selectedRuleType) {
       url += `?selected_rule_type=${selectedRuleType.value}`
     }
@@ -161,12 +161,12 @@ const RulesAnalysis: React.FC<RouteComponentProps<ActivityRouteProps>> = ({ hist
           note,
           firstLayerFeedback: first_feedback,
           secondLayerFeedback: second_feedback,
-          handleClick: () => window.open(`/cms/comprehension#/activities/${activityId}/rules-analysis/${selectedPrompt.conjunction}/rule/${rule_uid}/prompt/${selectedPrompt.id}`, '_blank')
+          handleClick: () => window.open(`/cms/evidence#/activities/${activityId}/rules-analysis/${selectedPrompt.conjunction}/rule/${rule_uid}/prompt/${selectedPrompt.id}`, '_blank')
         }
       }).sort(firstBy('apiOrder').thenBy('ruleOrder'));
       setFormattedRows(formattedRows);
     }
-  }, [ruleFeedbackHistory])
+  }, [ruleFeedbackHistory, selectedRuleType])
 
   function handleSetTurkSessionID(e: InputEvent){ setTurkSessionID(e.target.value) };
 
@@ -393,33 +393,16 @@ const RulesAnalysis: React.FC<RouteComponentProps<ActivityRouteProps>> = ({ hist
           value={selectedRuleType}
         />
       </div>
-      <div className="date-selection-container rules-analysis">
-        <p className="date-picker-label">Start Date:</p>
-        <DateTimePicker
-          ampm={false}
-          className="start-date-picker"
-          format='y-MM-dd HH:mm'
-          onChange={onStartDateChange}
-          value={startDate}
-        />
-        <p className="date-picker-label">End Date (optional):</p>
-        <DateTimePicker
-          ampm={false}
-          className="end-date-picker"
-          format='y-MM-dd HH:mm'
-          onChange={onEndDateChange}
-          value={endDate}
-        />
-        <p className="date-picker-label">Turk Session ID (optional):</p>
-        <Input
-          className="turk-session-id-input"
-          handleChange={handleSetTurkSessionID}
-          label=""
-          value={turkSessionID}
-        />
-        <button className="quill-button fun primary contained" onClick={handleFilterClick} type="submit">Filter</button>
-        {showError && <p className="error-message">Start date is required.</p>}
-      </div>
+      <FilterWidget
+        endDate={endDate}
+        handleFilterClick={handleFilterClick}
+        handleSetTurkSessionID={handleSetTurkSessionID}
+        onEndDateChange={onEndDateChange}
+        onStartDateChange={onStartDateChange}
+        showError={showError}
+        startDate={startDate}
+        turkSessionID={turkSessionID}
+      />
       {renderDataSection()}
     </div>
   );
