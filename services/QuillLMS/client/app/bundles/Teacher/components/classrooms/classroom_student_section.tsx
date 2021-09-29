@@ -7,48 +7,66 @@ import MergeStudentAccountsModal from './merge_student_accounts_modal'
 import MoveStudentsModal from './move_students_modal'
 import RemoveStudentsModal from './remove_students_modal'
 
-import { DropdownInput, DataTable } from '../../../Shared/index'
+import { DropdownInput, DataTable, Tooltip, helpIcon } from '../../../Shared/index'
 
 const emptyDeskSrc = `${process.env.CDN_URL}/images/illustrations/empty-desks.svg`
 const bulbSrc = `${process.env.CDN_URL}/images/illustrations/bulb.svg`
 const cleverSetupInstructionsPdf = `${process.env.CDN_URL}/documents/setup_instructions_pdfs/clever_setup_instructions.pdf`
 const googleSetupInstructionsPdf = `${process.env.CDN_URL}/documents/setup_instructions_pdfs/google_setup_instructions.pdf`
 
-const activeHeaders = [
-  {
+function activeHeaders(hasProviderClassroom: boolean) {
+  const name = {
     width: '190px',
     name: 'Name',
     attribute: 'name'
-  }, {
-    width: '362px',
+  }
+
+  const username = {
+    width: hasProviderClassroom ? '362px' : '486px',
     name: 'Username',
     attribute: 'username'
-  }, {
+  }
+
+  const synced = {
     width: '124px',
     name: 'Synced',
-    attribute: 'synced'
-  }, {
+    attribute: 'synced',
+    noTooltip: true,
+    rowSectionClassName: 'show-overflow'
+  }
+
+  const actions =  {
     name: 'Actions',
     attribute: 'actions',
     isActions: true
   }
-]
 
-const archivedHeaders = [
-  {
+  return hasProviderClassroom ? [name, username, synced, actions] : [name, username, actions]
+}
+
+function archivedHeaders(hasProviderClassroom: boolean) {
+  const name = {
     width: '235px',
     name: 'Name',
     attribute: 'name'
-  }, {
-    width: '407px',
+  }
+
+  const username = {
+    width: hasProviderClassroom ? '407px' : '531px',
     name: 'Username',
     attribute: 'username'
-  }, {
+  }
+
+  const synced = {
     width: '124px',
     name: 'Synced',
-    attribute: 'synced'
+    attribute: 'synced',
+    noTooltip: true,
+    rowSectionClassName: 'show-overflow'
   }
-]
+
+  return hasProviderClassroom ? [name, username, synced] : [name, username]
+}
 
 enum modalNames {
   editStudentAccountModal = 'editStudentAccountModal',
@@ -156,7 +174,7 @@ export default class ClassroomStudentSection extends React.Component<ClassroomSt
   }
 
   actionsForIndividualStudent = (student) => {
-    const { google_id, clever_id, } = student
+    const { google_id, clever_id, synced } = student
     const { classrooms, isOwnedByCurrentUser, } = this.props
     const {
       editAccount,
@@ -167,7 +185,7 @@ export default class ClassroomStudentSection extends React.Component<ClassroomSt
       removeFromClass
     } = this.individualStudentActions()
     if (google_id || clever_id) {
-      return [ viewAsStudent, removeFromClass ]
+      return synced ? [viewAsStudent] : [viewAsStudent, moveClass, removeFromClass]
     } else if (classrooms.length > 1 && isOwnedByCurrentUser) {
       return [ editAccount, resetPassword, viewAsStudent, mergeAccounts, moveClass, removeFromClass ]
     } else if (isOwnedByCurrentUser) {
@@ -405,16 +423,39 @@ export default class ClassroomStudentSection extends React.Component<ClassroomSt
     }
   }
 
+  syncedStatus(student: any, providerClassroom: string) {
+    const { synced } = student
+
+    if (synced === undefined || synced === null) { return '' }
+    if (synced) { return 'Yes' }
+
+    return (
+      <Tooltip
+        tooltipText={`This student is no longer in this class in ${providerClassroom}`}
+
+        tooltipTriggerText={
+          <div className="text-and-icon-wrapper">
+            <span>No&nbsp;</span>
+            <img
+              alt={helpIcon.alt}
+              src={helpIcon.src}
+            />
+          </div>
+        }
+      />
+    )
+  }
+
   renderStudentDataTable() {
     const { classroom, } = this.props
     const { selectedStudentIds, } = this.state
+    const { providerClassroom } = classroom
+    const hasProviderClassroom = providerClassroom !== undefined
 
     const rows = classroom.students.map(student => {
-      const { name, username, id, google_id, clever_id, } = student
+      const { name, username, id, } = student
       const checked = !!selectedStudentIds.includes(id)
-      let synced = ''
-      if (google_id) { synced = 'Google Classroom'}
-      if (clever_id) { synced = 'Clever' }
+      const synced = this.syncedStatus(student, providerClassroom)
       return {
         synced,
         name,
@@ -428,7 +469,8 @@ export default class ClassroomStudentSection extends React.Component<ClassroomSt
     return (<DataTable
       checkAllRows={this.checkAllRows}
       checkRow={this.checkRow}
-      headers={classroom.visible ? activeHeaders : archivedHeaders}
+      className={'show-overflow'}
+      headers={classroom.visible ? activeHeaders(hasProviderClassroom) : archivedHeaders(hasProviderClassroom)}
       rows={rows}
       showActions={classroom.visible}
       showCheckboxes={classroom.visible}

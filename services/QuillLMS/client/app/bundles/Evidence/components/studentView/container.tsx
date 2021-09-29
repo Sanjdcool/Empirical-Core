@@ -8,17 +8,17 @@ import RightPanel from './rightPanel'
 import { explanationData } from "../activitySlides/explanationData";
 import ExplanationSlide from "../activitySlides/explanationSlide";
 import WelcomeSlide from "../activitySlides/welcomeSlide";
-import PostActivitySlide from '../activitySlides/postActivitySlide';
+import ActivityFollowUp from './activityFollowUp';
 import LoadingSpinner from '../shared/loadingSpinner'
 import { getActivity } from "../../actions/activities";
 import { TrackAnalyticsEvent } from "../../actions/analytics";
 import { Events } from '../../modules/analytics'
-import { completeActivitySession, fetchActiveActivitySession, getFeedback, processUnfetchableSession, saveActiveActivitySession } from '../../actions/session'
+import { completeActivitySession, fetchActiveActivitySession, getFeedback, processUnfetchableSession, saveActiveActivitySession, saveActivitySurveyResponse, reportAProblem, } from '../../actions/session'
 import { generateConceptResults, } from '../../libs/conceptResults'
 import { ActivitiesReducerState } from '../../reducers/activitiesReducer'
 import { SessionReducerState } from '../../reducers/sessionReducer'
 import getParameterByName from '../../helpers/getParameterByName';
-import { getUrlParam, onMobile, outOfAttemptsForActivePrompt, getCurrentStepDataForEventTracking, everyOtherStepCompleted } from '../../helpers/containerActionHelpers';
+import { getUrlParam, onMobile, outOfAttemptsForActivePrompt, getCurrentStepDataForEventTracking, everyOtherStepCompleted, getStrippedPassageHighlights } from '../../helpers/containerActionHelpers';
 import { renderStepLinksAndDirections, renderReadPassageContainer } from '../../helpers/containerRenderHelpers';
 import { postTurkSession } from '../../utils/turkAPI';
 import { roundMillisecondsToSeconds, KEYDOWN, MOUSEMOVE, MOUSEDOWN, CLICK, KEYPRESS, VISIBILITYCHANGE } from '../../../Shared/index'
@@ -392,6 +392,12 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
 
   onStartPromptSteps = () => this.setState({ hasStartedPromptSteps: true, })
 
+  reportAProblem = (args) => {
+    const { session, } = this.props
+    const { sessionID, } = session
+    reportAProblem({...args, sessionID})
+  }
+
   handleClickDoneHighlighting = () => {
     this.setState({ doneHighlighting: true}, () => {
       if (onMobile()) { window.scrollTo(0, 0) }
@@ -483,7 +489,10 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
   }
 
   transformMarkTags = (node) => {
-    const { studentHighlights, showReadTheDirectionsModal, doneHighlighting, hasStartedReadPassageStep, } = this.state
+    const { activities, session } = this.props;
+    const { studentHighlights, showReadTheDirectionsModal, doneHighlighting, hasStartedReadPassageStep, activeStep } = this.state
+    const strippedPassageHighlights = getStrippedPassageHighlights({ activities, session, activeStep });
+
     if (node.name === 'mark') {
       const shouldBeHighlightable = !doneHighlighting && !showReadTheDirectionsModal && hasStartedReadPassageStep
       const innerElements = node.children.map((n, i) => convertNodeToElement(n, i, this.transformMarkTags))
@@ -493,6 +502,12 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
       className += shouldBeHighlightable  ? ' highlightable' : ''
       if (!shouldBeHighlightable) { return <mark className={className}>{innerElements}</mark>}
       return <mark className={className} onClick={this.handleHighlightClick} onKeyDown={this.handleHighlightKeyDown} role="button" tabIndex={0}>{innerElements}</mark>
+    }
+    if(node.name === 'p' && activeStep > 1 && strippedPassageHighlights) {
+      const stringifiedInnerElements = node.children.map(n => n.data ? n.data : n.children[0].data).join('')
+      if(stringifiedInnerElements && strippedPassageHighlights.includes(stringifiedInnerElements)) {
+        return <p><span className="passage-highlight">{stringifiedInnerElements}</span></p>
+      }
     }
   }
 
@@ -508,13 +523,13 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
 
   render = () => {
     const { activities, session, user } = this.props
-    const { submittedResponses } = session;
+    const { submittedResponses, sessionID, } = session;
     const { showFocusState, activeStep, activityIsComplete, explanationSlidesCompleted, explanationSlideStep, hasStartedPromptSteps, hasStartedReadPassageStep, doneHighlighting, showReadTheDirectionsModal, completedSteps, scrolledToEndOfPassage, studentHighlights } = this.state
     const stepsHash = {
-      'step1': this.step1,
-      'step2': this.step2,
-      'step3': this.step3,
-      'step4': this.step4,
+      'step1': (node: JSX.Element) => this.step1 = node,
+      'step2': (node: JSX.Element) => this.step2 = node,
+      'step3': (node: JSX.Element) => this.step3 = node,
+      'step4': (node: JSX.Element) => this.step4 = node,
     }
 
     if (!activities.hasReceivedData) { return <LoadingSpinner /> }
@@ -531,7 +546,7 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
     }
     if(activityIsComplete && !window.location.href.includes('turk')) {
       return(
-        <PostActivitySlide responses={submittedResponses} user={user} />
+        <ActivityFollowUp responses={submittedResponses} saveActivitySurveyResponse={saveActivitySurveyResponse} sessionID={sessionID} user={user} />
       );
     }
     return (
@@ -555,9 +570,7 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
           hasStartedPromptSteps,
           hasStartedReadPassageStep,
           scrolledToEndOfPassage,
-          session,
           showReadTheDirectionsModal,
-          studentHighlights,
           transformMarkTags: this.transformMarkTags
         })}
         <RightPanel
@@ -574,6 +587,7 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
           hasStartedReadPassageStep={hasStartedReadPassageStep}
           onStartPromptSteps={this.onStartPromptSteps}
           onStartReadPassage={this.onStartReadPassage}
+          reportAProblem={this.reportAProblem}
           resetTimers={this.resetTimers}
           scrolledToEndOfPassage={scrolledToEndOfPassage}
           session={session}
