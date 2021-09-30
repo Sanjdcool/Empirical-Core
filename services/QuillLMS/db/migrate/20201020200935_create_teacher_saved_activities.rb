@@ -6,6 +6,6 @@ class CreateTeacherSavedActivities < ActiveRecord::Migration[4.2]
 
       t.timestamps null: false
     end
-    add_foreign_key :teacher_saved_activities, :users, column: :teacher_id
+    # add_foreign_key :teacher_saved_activities, :users, column: :teacher_id
   end
 end

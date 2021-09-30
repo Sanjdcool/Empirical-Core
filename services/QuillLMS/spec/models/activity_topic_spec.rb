@@ -2,9 +2,9 @@
 #
 # Table name: activity_topics
 #
-#  id          :integer          not null, primary key
-#  activity_id :integer          not null
-#  topic_id    :integer          not null
+#  id          :bigint           not null, primary key
+#  activity_id :bigint           not null
+#  topic_id    :bigint           not null
 #
 # Indexes
 #

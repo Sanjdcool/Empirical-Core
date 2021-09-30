@@ -2,14 +2,19 @@
 #
 # Table name: standards
 #
-#  id                   :integer          not null, primary key
+#  id                   :bigint           not null, primary key
 #  name                 :string
 #  uid                  :string
 #  visible              :boolean          default(TRUE)
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
-#  standard_category_id :integer
-#  standard_level_id    :integer
+#  standard_category_id :bigint
+#  standard_level_id    :bigint
+#
+# Indexes
+#
+#  index_standards_on_standard_category_id  (standard_category_id)
+#  index_standards_on_standard_level_id     (standard_level_id)
 #
 # Foreign Keys
 #

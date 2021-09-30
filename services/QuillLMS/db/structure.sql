@@ -234,7 +234,7 @@ SET default_with_oids = false;
 --
 
 CREATE TABLE public.active_activity_sessions (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     uid character varying,
     data jsonb,
     created_at timestamp without time zone NOT NULL,
@@ -247,7 +247,6 @@ CREATE TABLE public.active_activity_sessions (
 --
 
 CREATE SEQUENCE public.active_activity_sessions_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -280,8 +279,8 @@ CREATE TABLE public.activities (
     repeatable boolean DEFAULT true,
     follow_up_activity_id integer,
     supporting_info character varying,
-    standard_id integer,
-    raw_score_id integer
+    standard_id bigint,
+    raw_score_id bigint
 );
 
 
@@ -535,13 +534,47 @@ ALTER SEQUENCE public.activity_sessions_id_seq OWNED BY public.activity_sessions
 
 
 --
+-- Name: activity_survey_responses; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.activity_survey_responses (
+    id bigint NOT NULL,
+    activity_session_id bigint,
+    emoji_selection integer NOT NULL,
+    multiple_choice_selections character varying[] NOT NULL,
+    survey_question character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: activity_survey_responses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.activity_survey_responses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: activity_survey_responses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.activity_survey_responses_id_seq OWNED BY public.activity_survey_responses.id;
+
+
+--
 -- Name: activity_topics; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.activity_topics (
-    id integer NOT NULL,
-    activity_id integer NOT NULL,
-    topic_id integer NOT NULL
+    id bigint NOT NULL,
+    activity_id bigint NOT NULL,
+    topic_id bigint NOT NULL
 );
 
 
@@ -550,7 +583,6 @@ CREATE TABLE public.activity_topics (
 --
 
 CREATE SEQUENCE public.activity_topics_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1196,7 +1228,7 @@ ALTER SEQUENCE public.classrooms_teachers_id_seq OWNED BY public.classrooms_teac
 --
 
 CREATE TABLE public.comprehension_activities (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     title character varying(100),
     parent_activity_id integer,
     target_level smallint,
@@ -1212,7 +1244,6 @@ CREATE TABLE public.comprehension_activities (
 --
 
 CREATE SEQUENCE public.comprehension_activities_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1372,7 +1403,7 @@ ALTER SEQUENCE public.comprehension_labels_id_seq OWNED BY public.comprehension_
 --
 
 CREATE TABLE public.comprehension_passages (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     activity_id integer,
     text text,
     created_at timestamp without time zone NOT NULL,
@@ -1390,7 +1421,6 @@ CREATE TABLE public.comprehension_passages (
 --
 
 CREATE SEQUENCE public.comprehension_passages_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1443,7 +1473,7 @@ ALTER SEQUENCE public.comprehension_plagiarism_texts_id_seq OWNED BY public.comp
 --
 
 CREATE TABLE public.comprehension_prompts (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     activity_id integer,
     max_attempts smallint,
     conjunction character varying(20),
@@ -1459,7 +1489,6 @@ CREATE TABLE public.comprehension_prompts (
 --
 
 CREATE SEQUENCE public.comprehension_prompts_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1513,8 +1542,8 @@ ALTER SEQUENCE public.comprehension_prompts_rules_id_seq OWNED BY public.compreh
 
 CREATE TABLE public.comprehension_regex_rules (
     id integer NOT NULL,
-    regex_text character varying(200),
-    case_sensitive boolean,
+    regex_text character varying(200) NOT NULL,
+    case_sensitive boolean NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     rule_id integer,
@@ -1620,7 +1649,7 @@ ALTER SEQUENCE public.comprehension_turking_round_activity_sessions_id_seq OWNED
 --
 
 CREATE TABLE public.comprehension_turking_rounds (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     activity_id integer,
     uuid uuid,
     expires_at timestamp without time zone,
@@ -1634,7 +1663,6 @@ CREATE TABLE public.comprehension_turking_rounds (
 --
 
 CREATE SEQUENCE public.comprehension_turking_rounds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1760,9 +1788,9 @@ ALTER SEQUENCE public.concepts_id_seq OWNED BY public.concepts.id;
 --
 
 CREATE TABLE public.content_partner_activities (
-    id integer NOT NULL,
-    content_partner_id integer,
-    activity_id integer,
+    id bigint NOT NULL,
+    content_partner_id bigint,
+    activity_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1773,7 +1801,6 @@ CREATE TABLE public.content_partner_activities (
 --
 
 CREATE SEQUENCE public.content_partner_activities_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1793,7 +1820,7 @@ ALTER SEQUENCE public.content_partner_activities_id_seq OWNED BY public.content_
 --
 
 CREATE TABLE public.content_partners (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying NOT NULL,
     description character varying,
     created_at timestamp without time zone NOT NULL,
@@ -1807,7 +1834,6 @@ CREATE TABLE public.content_partners (
 --
 
 CREATE SEQUENCE public.content_partners_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2010,8 +2036,8 @@ CREATE TABLE public.districts_users (
 CREATE TABLE public.feedback_histories (
     id integer NOT NULL,
     feedback_session_uid text,
-    prompt_id integer,
     prompt_type character varying,
+    prompt_id integer,
     concept_uid text,
     attempt integer NOT NULL,
     entry text NOT NULL,
@@ -2721,7 +2747,7 @@ ALTER SEQUENCE public.questions_id_seq OWNED BY public.questions.id;
 --
 
 CREATE TABLE public.raw_scores (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -2733,7 +2759,6 @@ CREATE TABLE public.raw_scores (
 --
 
 CREATE SEQUENCE public.raw_scores_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3124,7 +3149,7 @@ ALTER SEQUENCE public.schools_users_id_seq OWNED BY public.schools_users.id;
 --
 
 CREATE TABLE public.standard_categories (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying,
     uid character varying,
     visible boolean DEFAULT true,
@@ -3138,7 +3163,6 @@ CREATE TABLE public.standard_categories (
 --
 
 CREATE SEQUENCE public.standard_categories_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3158,7 +3182,7 @@ ALTER SEQUENCE public.standard_categories_id_seq OWNED BY public.standard_catego
 --
 
 CREATE TABLE public.standard_levels (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying,
     uid character varying,
     "position" integer,
@@ -3173,7 +3197,6 @@ CREATE TABLE public.standard_levels (
 --
 
 CREATE SEQUENCE public.standard_levels_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3193,11 +3216,11 @@ ALTER SEQUENCE public.standard_levels_id_seq OWNED BY public.standard_levels.id;
 --
 
 CREATE TABLE public.standards (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying,
     uid character varying,
-    standard_level_id integer,
-    standard_category_id integer,
+    standard_level_id bigint,
+    standard_category_id bigint,
     visible boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -3209,7 +3232,6 @@ CREATE TABLE public.standards (
 --
 
 CREATE SEQUENCE public.standards_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3256,6 +3278,38 @@ CREATE SEQUENCE public.student_feedback_responses_id_seq
 --
 
 ALTER SEQUENCE public.student_feedback_responses_id_seq OWNED BY public.student_feedback_responses.id;
+
+
+--
+-- Name: student_problem_reports; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.student_problem_reports (
+    id bigint NOT NULL,
+    feedback_history_id bigint NOT NULL,
+    report character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: student_problem_reports_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.student_problem_reports_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: student_problem_reports_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.student_problem_reports_id_seq OWNED BY public.student_problem_reports.id;
 
 
 --
@@ -3372,9 +3426,9 @@ ALTER SEQUENCE public.subscriptions_id_seq OWNED BY public.subscriptions.id;
 --
 
 CREATE TABLE public.teacher_saved_activities (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     teacher_id integer NOT NULL,
-    activity_id integer NOT NULL,
+    activity_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -3385,7 +3439,6 @@ CREATE TABLE public.teacher_saved_activities (
 --
 
 CREATE SEQUENCE public.teacher_saved_activities_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3474,7 +3527,7 @@ ALTER SEQUENCE public.title_cards_id_seq OWNED BY public.title_cards.id;
 --
 
 CREATE TABLE public.topics (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     name character varying NOT NULL,
     level integer NOT NULL,
     visible boolean DEFAULT true NOT NULL,
@@ -3489,7 +3542,6 @@ CREATE TABLE public.topics (
 --
 
 CREATE SEQUENCE public.topics_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3891,6 +3943,13 @@ ALTER TABLE ONLY public.activity_healths ALTER COLUMN id SET DEFAULT nextval('pu
 --
 
 ALTER TABLE ONLY public.activity_sessions ALTER COLUMN id SET DEFAULT nextval('public.activity_sessions_id_seq'::regclass);
+
+
+--
+-- Name: activity_survey_responses id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_survey_responses ALTER COLUMN id SET DEFAULT nextval('public.activity_survey_responses_id_seq'::regclass);
 
 
 --
@@ -4426,6 +4485,13 @@ ALTER TABLE ONLY public.student_feedback_responses ALTER COLUMN id SET DEFAULT n
 
 
 --
+-- Name: student_problem_reports id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.student_problem_reports ALTER COLUMN id SET DEFAULT nextval('public.student_problem_reports_id_seq'::regclass);
+
+
+--
 -- Name: students_classrooms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -4599,6 +4665,14 @@ ALTER TABLE ONLY public.activity_healths
 
 ALTER TABLE ONLY public.activity_sessions
     ADD CONSTRAINT activity_sessions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: activity_survey_responses activity_survey_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_survey_responses
+    ADD CONSTRAINT activity_survey_responses_pkey PRIMARY KEY (id);
 
 
 --
@@ -5218,6 +5292,14 @@ ALTER TABLE ONLY public.student_feedback_responses
 
 
 --
+-- Name: student_problem_reports student_problem_reports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.student_problem_reports
+    ADD CONSTRAINT student_problem_reports_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: students_classrooms students_classrooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5416,6 +5498,13 @@ CREATE INDEX index_activities_on_raw_score_id ON public.activities USING btree (
 
 
 --
+-- Name: index_activities_on_standard_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activities_on_standard_id ON public.activities USING btree (standard_id);
+
+
+--
 -- Name: index_activities_on_topic_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5497,6 +5586,13 @@ CREATE UNIQUE INDEX index_activity_sessions_on_uid ON public.activity_sessions U
 --
 
 CREATE INDEX index_activity_sessions_on_user_id ON public.activity_sessions USING btree (user_id);
+
+
+--
+-- Name: index_activity_survey_responses_on_activity_session_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_activity_survey_responses_on_activity_session_id ON public.activity_survey_responses USING btree (activity_session_id);
 
 
 --
@@ -6277,6 +6373,27 @@ CREATE UNIQUE INDEX index_schools_users_on_user_id ON public.schools_users USING
 
 
 --
+-- Name: index_standards_on_standard_category_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_standards_on_standard_category_id ON public.standards USING btree (standard_category_id);
+
+
+--
+-- Name: index_standards_on_standard_level_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_standards_on_standard_level_id ON public.standards USING btree (standard_level_id);
+
+
+--
+-- Name: index_student_problem_reports_on_feedback_history_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_student_problem_reports_on_feedback_history_id ON public.student_problem_reports USING btree (feedback_history_id);
+
+
+--
 -- Name: index_students_classrooms_on_classroom_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6344,13 +6461,6 @@ CREATE INDEX index_subscriptions_on_start_date ON public.subscriptions USING btr
 --
 
 CREATE INDEX index_teacher_saved_activities_on_activity_id ON public.teacher_saved_activities USING btree (activity_id);
-
-
---
--- Name: index_teacher_saved_activities_on_teacher_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_teacher_saved_activities_on_teacher_id ON public.teacher_saved_activities USING btree (teacher_id);
 
 
 --
@@ -6991,6 +7101,14 @@ ALTER TABLE ONLY public.sales_contacts
 
 
 --
+-- Name: student_problem_reports fk_rails_d7543aef9e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.student_problem_reports
+    ADD CONSTRAINT fk_rails_d7543aef9e FOREIGN KEY (feedback_history_id) REFERENCES public.feedback_histories(id);
+
+
+--
 -- Name: recommendations fk_rails_dc326309ed; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7012,6 +7130,14 @@ ALTER TABLE ONLY public.comprehension_regex_rules
 
 ALTER TABLE ONLY public.sales_stages
     ADD CONSTRAINT fk_rails_e5da9d6c2d FOREIGN KEY (sales_stage_type_id) REFERENCES public.sales_stage_types(id);
+
+
+--
+-- Name: activity_survey_responses fk_rails_e65c2d2818; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.activity_survey_responses
+    ADD CONSTRAINT fk_rails_e65c2d2818 FOREIGN KEY (activity_session_id) REFERENCES public.activity_sessions(id);
 
 
 --
@@ -7459,6 +7585,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20210811130155'),
 ('20210816195838'),
 ('20210824114552'),
-('20210913181519');
+('20210913181519'),
+('20210920131932'),
+('20210922150456');
 
 

@@ -2,7 +2,7 @@
 #
 # Table name: standard_levels
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  name       :string
 #  position   :integer
 #  uid        :string

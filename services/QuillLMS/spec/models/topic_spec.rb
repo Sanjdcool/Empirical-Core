@@ -2,7 +2,7 @@
 #
 # Table name: topics
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  level      :integer          not null
 #  name       :string           not null
 #  visible    :boolean          default(TRUE), not null

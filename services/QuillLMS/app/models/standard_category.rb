@@ -2,7 +2,7 @@
 #
 # Table name: standard_categories
 #
-#  id         :integer          not null, primary key
+#  id         :bigint           not null, primary key
 #  name       :string
 #  uid        :string
 #  visible    :boolean          default(TRUE)

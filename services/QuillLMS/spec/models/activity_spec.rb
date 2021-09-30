@@ -14,14 +14,15 @@
 #  updated_at                 :datetime
 #  activity_classification_id :integer
 #  follow_up_activity_id      :integer
-#  raw_score_id               :integer
-#  standard_id                :integer
+#  raw_score_id               :bigint
+#  standard_id                :bigint
 #  topic_id                   :integer
 #
 # Indexes
 #
 #  index_activities_on_activity_classification_id  (activity_classification_id)
 #  index_activities_on_raw_score_id                (raw_score_id)
+#  index_activities_on_standard_id                 (standard_id)
 #  index_activities_on_topic_id                    (topic_id)
 #  index_activities_on_uid                         (uid) UNIQUE
 #

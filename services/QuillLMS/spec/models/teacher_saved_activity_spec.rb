@@ -2,16 +2,15 @@
 #
 # Table name: teacher_saved_activities
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
-#  activity_id :integer          not null
+#  activity_id :bigint           not null
 #  teacher_id  :integer          not null
 #
 # Indexes
 #
 #  index_teacher_saved_activities_on_activity_id                 (activity_id)
-#  index_teacher_saved_activities_on_teacher_id                  (teacher_id)
 #  index_teacher_saved_activities_on_teacher_id_and_activity_id  (teacher_id,activity_id) UNIQUE
 #
 # Foreign Keys

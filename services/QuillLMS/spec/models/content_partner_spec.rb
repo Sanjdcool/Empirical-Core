@@ -2,7 +2,7 @@
 #
 # Table name: content_partners
 #
-#  id          :integer          not null, primary key
+#  id          :bigint           not null, primary key
 #  description :string
 #  name        :string           not null
 #  visible     :boolean          default(TRUE)
