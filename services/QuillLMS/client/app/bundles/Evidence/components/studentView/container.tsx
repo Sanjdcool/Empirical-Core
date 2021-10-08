@@ -526,6 +526,7 @@ export class StudentViewContainer extends React.Component<StudentViewContainerPr
 
   render = () => {
     const { activities, session, user } = this.props
+    console.log("🚀 ~ file: container.tsx ~ line 529 ~ StudentViewContainer ~ this.props", this.props)
     const { submittedResponses, sessionID, } = session;
     const { showFocusState, activeStep, activityIsComplete, explanationSlidesCompleted, explanationSlideStep, hasStartedPromptSteps, hasStartedReadPassageStep, doneHighlighting, showReadTheDirectionsModal, completedSteps, scrolledToEndOfPassage, studentHighlights } = this.state
     const stepsHash = {

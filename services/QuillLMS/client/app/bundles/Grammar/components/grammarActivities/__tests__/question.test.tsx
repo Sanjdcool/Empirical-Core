@@ -27,6 +27,20 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
+// jest.mock('../../../../Connect/libs/getParameterByName', () => jest.fn());
+// const {getParameterByName} = require('../../../../Connect/libs/getParameterByName');
+
+// const mockGetParameterByName = jest.fn().mockReturnValue('student')
+const mockGetParameterByName = jest.fn()
+// jest.mock('../../../../Connect/libs/getParameterByName', () => ({
+  // default: mockGetParameterByName
+//   getParameterByName: mockGetParameterByName
+// }))
+
+jest.mock('../../../../Connect/libs/getParameterByName', () => ({
+  getParameterByName: () => mockGetParameterByName,
+}));
+
 process.env.DEFAULT_URL = 'https://staging.quill.org'
 process.env.QUILL_CMS = 'https://cms.quill.org'
 
@@ -46,6 +60,7 @@ describe("<QuestionComponent />", () => {
 
   it("should render", () => {
     expect(mountWrapper).toMatchSnapshot();
+    expect(mockGetParameterByName).toHaveBeenCalled()
   });
 
   it("should render an h1 with the current activity's title", () => {

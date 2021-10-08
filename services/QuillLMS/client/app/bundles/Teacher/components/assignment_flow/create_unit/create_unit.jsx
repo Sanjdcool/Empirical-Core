@@ -3,6 +3,8 @@ import React from 'react';
 import Stage1 from './select_activities_container';
 import Stage2 from './stage2/Stage2';
 import UnitAssignmentFollowup from './unit_assignment_followup.tsx';
+import ShareToGoogleClassroom from './google_classroom/ShareToGoogleClassroom';
+
 import {
   CLASSROOMS,
   UNIT_NAME,
@@ -108,8 +110,6 @@ export default class CreateUnit extends React.Component {
   }
 
   getSelectedActivities = () => this.state.selectedActivities
-
-  getStage = () => this.state.stage;
 
   getUnitName = () => this.state.name
 
@@ -289,7 +289,21 @@ export default class CreateUnit extends React.Component {
     />);
   }
 
+  handleSetStage4 = () => {
+    this.setState({ stage: 4 });
+  }
+
   stage3specificComponents = () => {
+    const isFromDiagnosticPath = !!parsedQueryParams().diagnostic_unit_template_id
+    return <ShareToGoogleClassroom
+      handleSetNextStage={this.handleSetStage4}
+      isFromDiagnosticPath={isFromDiagnosticPath}
+      unitTemplateId={this.unitTemplateId()}
+      unitTemplateName={this.unitTemplateName()}
+    />
+  }
+
+  stage4specificComponents = () => {
     const { referralCode, location, history, } = this.props
     const { classrooms, selectedActivities, name, } = this.state
     if ((this.state.assignSuccess)) {
@@ -389,14 +403,17 @@ export default class CreateUnit extends React.Component {
   }
 
   render = () => {
+    const { stage } = this.state;
     let stageSpecificComponents;
 
-    if (this.getStage() === 1) {
+    if (stage === 1) {
       stageSpecificComponents = this.stage1SpecificComponents();
-    } else if (this.getStage() === 2) {
+    } else if (stage === 2) {
       stageSpecificComponents = this.stage2SpecificComponents();
-    } else if (this.getStage() === 3) {
+    } else if (stage === 3) {
       stageSpecificComponents = this.stage3specificComponents();
+    } else if(stage === 4) {
+      stageSpecificComponents = this.stage4specificComponents();
     }
     return (
       <span>
