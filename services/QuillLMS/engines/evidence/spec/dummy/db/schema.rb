@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210816195955) do
+ActiveRecord::Schema.define(version: 20211014150016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,25 @@ ActiveRecord::Schema.define(version: 20210816195955) do
     t.index ["uuid"], name: "index_comprehension_turking_rounds_on_uuid", unique: true
   end
 
+  create_table "evidence_sequence_groups", force: :cascade do |t|
+    t.integer "rule_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "evidence_rule_id"
+    t.index ["evidence_rule_id"], name: "index_evidence_sequence_groups_on_evidence_rule_id"
+  end
+
+  create_table "evidence_sequences", force: :cascade do |t|
+    t.integer "sequence_group_id", null: false
+    t.string "regex_text", limit: 200, null: false
+    t.boolean "case_sensitive", null: false
+    t.string "sequence_type", default: "incorrect", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "evidence_sequence_group_id"
+    t.index ["evidence_sequence_group_id"], name: "index_evidence_sequences_on_evidence_sequence_group_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "name"
   end
@@ -182,4 +201,5 @@ ActiveRecord::Schema.define(version: 20210816195955) do
   add_foreign_key "comprehension_labels", "comprehension_rules", column: "rule_id", on_delete: :cascade
   add_foreign_key "comprehension_plagiarism_texts", "comprehension_rules", column: "rule_id", on_delete: :cascade
   add_foreign_key "comprehension_regex_rules", "comprehension_rules", column: "rule_id", on_delete: :cascade
+  add_foreign_key "evidence_sequences", "evidence_sequence_groups", column: "sequence_group_id", on_delete: :cascade
 end

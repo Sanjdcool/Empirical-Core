@@ -39,6 +39,7 @@ module Evidence
     has_many :prompts_rules, inverse_of: :rule
     has_many :prompts, through: :prompts_rules, inverse_of: :rules
     has_many :regex_rules, inverse_of: :rule, dependent: :destroy
+    has_many :sequence_groups, inverse_of: :rule, dependent: :destroy
 
     accepts_nested_attributes_for :plagiarism_text
     accepts_nested_attributes_for :feedbacks, allow_destroy: true
