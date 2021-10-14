@@ -109,7 +109,7 @@ const RuleRegexAttributes = ({
         {regexFeedback[0].highlights_attributes && regexFeedback[0].highlights_attributes.filter(h => !h._destroy) && regexFeedback[0].highlights_attributes.filter(h => !h._destroy).length ? <button className="remove-highlight quill-button small secondary outlined" onClick={onHandleRemoveFeedbackHighlight} type="button" value="0">Remove Highlight</button> : null}
       </div>)}
       {errors['Regex Feedback'] && <p className="error-message">{errors['Regex Feedback']}</p>}
-      <p className="form-subsection-label" id="regex-rules-label">Regex Rules</p>
+      <p className="form-subsection-label" id="regex-rules-label">Sequence Groups</p>
       <RegexRules
         errors={errors}
         handleAddRegexInput={onHandleAddRegexInput}
