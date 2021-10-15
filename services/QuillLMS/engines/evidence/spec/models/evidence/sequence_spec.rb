@@ -40,29 +40,24 @@ module Evidence
       end
     end
 
-    # context 'should entry_failing?' do
-    #   let!(:rule) { create(:evidence_rule) }
-    #   let!(:regex_rule) { RegexRule.create(:rule => (rule), :regex_text => "^test", :sequence_type => "required", :case_sensitive => false) }
+    context 'should regex_matches?' do
+      let!(:rule) { create(:evidence_rule) }
+      let!(:sequence_group) { create(:evidence_sequence_group, rule: rule) }
+      let!(:sequence) { create(:evidence_sequence, sequence_group: sequence_group, regex_text: "^test")}
 
-    #   it 'should flag entry as failing if regex does not match and sequence type is required' do
-    #     expect(regex_rule.entry_failing?("not test passing")).to(eq(true))
-    #   end
+      it 'should match to true if the regex matches' do
+        expect(sequence.regex_matches?("test matches")).to(eq(true))
+      end
 
-    #   it 'should flag entry as failing if regex matches and sequence type is incorrect' do
-    #     regex_rule.update(:sequence_type => "incorrect")
-    #     expect(regex_rule.entry_failing?("test regex").to_s).to eq 'test'
-    #   end
+      it 'should match to false if the regex does not match' do
+        expect(sequence.regex_matches?("failed test matches")).to(eq(false))
+      end
 
-    #   it 'should flag entry as failing case-insensitive if the regex_rule is case insensitive' do
-    #     regex_rule.update(:sequence_type => "incorrect")
-    #     expect(regex_rule.entry_failing?("TEST REGEX").to_s).to eq 'TEST'
-    #   end
-
-    #   it 'should not flag entry as failing if the regex_rule is case sensitive and the casing does not match' do
-    #     regex_rule.update(:sequence_type => "incorrect", :case_sensitive => true)
-    #     expect(regex_rule.entry_failing?("TEST REGEX").to_s).to eq ''
-    #   end
-    # end
+      it 'should match to false if the regex letters match but the sequence is case sensitive' do
+        sequence.update(case_sensitive: true)
+        expect(sequence.regex_matches?("TEST REGEX")).to(eq(false))
+      end
+    end
 
     context 'should incorrect_sequence?' do
 

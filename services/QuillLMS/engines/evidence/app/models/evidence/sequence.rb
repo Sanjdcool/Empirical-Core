@@ -30,13 +30,17 @@ module Evidence
       ))
     end
 
-    def entry_failing?(entry)
-      # for "incorrect" type regex rules, we want to "fail" if they have the regex. for "required" type regex
-      # rules, we want to "fail" when they dont have the regex.
-    end
-
     def incorrect_sequence?
       sequence_type == TYPE_INCORRECT
+    end
+
+    def required_sequence?
+      sequence_type == TYPE_REQUIRED
+    end
+
+    def regex_matches?(entry)
+      string_match = case_sensitive? ? Regexp.new(regex_text).match(entry) : Regexp.new(regex_text, Regexp::IGNORECASE).match(entry)
+      string_match.present?
     end
 
     def change_log_name
@@ -53,10 +57,6 @@ module Evidence
 
     def conjunctions
       sequence_group.rule.prompts.map(&:conjunction)
-    end
-
-    private def regex_match(entry)
-      case_sensitive? ? Regexp.new(regex_text).match(entry) : Regexp.new(regex_text, Regexp::IGNORECASE).match(entry)
     end
 
     private def set_default_case_sensitivity

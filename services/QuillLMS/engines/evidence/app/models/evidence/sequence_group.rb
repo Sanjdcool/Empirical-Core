@@ -15,9 +15,29 @@ module Evidence
       ))
     end
 
-    def entry_failing?(entry)
-      # TODO: write code here that tests all the sequences in the group and returns TRUE if the
-      # entry should receive feedback
+    def has_dual_sequences?
+      sequences.count > 1
+    end
+
+    def has_single_required_sequence?
+      sequences.count == 1 && sequences.first.required_sequence?
+    end
+
+    def has_single_incorrect_sequence?
+      sequences.count == 1 && sequences.first.incorrect_sequence?
+    end
+
+    def entry_passing?(entry)
+      incorrect_sequences_passing = true
+      required_sequences_passing = true
+      if sequences.where(sequence_type: Sequence::TYPE_INCORRECT).any?
+        incorrect_sequences_passing = sequences.where(sequence_type: Sequence::TYPE_INCORRECT).none? {|s| s.regex_matches?(entry)}
+      end
+      if sequences.where(sequence_type: Sequence::TYPE_REQUIRED).any?
+        required_sequences_passing =  sequences.where(sequence_type: Sequence::TYPE_REQUIRED).any? {|s| s.regex_matches?(entry)}
+        incorrect_sequences_passing = true if required_sequences_passing
+      end
+      return incorrect_sequences_passing && required_sequences_passing
     end
   end
 end

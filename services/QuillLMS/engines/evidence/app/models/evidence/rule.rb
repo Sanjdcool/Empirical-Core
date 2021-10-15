@@ -73,12 +73,8 @@ module Evidence
     end
 
     def regex_is_passing?(entry)
-      return true if regex_rules.empty?
-      if regex_rules.first.incorrect_sequence?
-        all_regex_rules_passing?(entry)
-      else
-        at_least_one_regex_rule_passing?(entry)
-      end
+      return true if sequence_groups.empty?
+      all_regex_rules_passing?(entry)
     end
 
     def display_name
@@ -143,15 +139,10 @@ module Evidence
     end
 
     private def all_regex_rules_passing?(entry)
-      regex_rules.none? do |regex_rule|
-        regex_rule.entry_failing?(entry)
-      end
-    end
-
-    private def at_least_one_regex_rule_passing?(entry)
-      regex_rules.any? do |regex_rule|
-        !regex_rule.entry_failing?(entry)
-      end
+      must_pass_all_sequences = sequence_groups.select {|sg| sg.has_dual_sequences? || sg.has_single_incorrect_sequence? }
+      must_pass_any_sequence = sequence_groups.select {|sg| sg.has_single_required_sequence? }
+      return (must_pass_all_sequences.empty? || must_pass_all_sequences.all? {|s| s.entry_passing?(entry)}) &&
+      (must_pass_any_sequence.empty? || must_pass_any_sequence.any? {|t| t.entry_passing?(entry)})
     end
 
     private def assign_uid_if_missing
