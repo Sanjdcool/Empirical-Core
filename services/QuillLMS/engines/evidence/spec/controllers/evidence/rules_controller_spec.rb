@@ -284,6 +284,42 @@ module Evidence
         expect(parsed_response["regex_rules"][0]["case_sensitive"]).to(eq(regex_rule.case_sensitive))
         expect(RegexRule.count).to(eq(1))
       end
+
+      it 'should create nested sequence group record when present in params' do
+        expect(Sequence.count).to(eq(0))
+        sequence_group = build(:evidence_sequence_group)
+        sequence = build(:evidence_sequence)
+        post(:create, :params => (
+          { :rule =>
+            (
+              { :concept_uid => rule.concept_uid,
+                :note => rule.note,
+                :name => rule.name,
+                :optimal => rule.optimal,
+                :state => rule.state,
+                :suborder => rule.suborder,
+                :rule_type => rule.rule_type,
+                :universal => rule.universal,
+                :sequence_groups_attributes =>
+                [{
+                  :sequences_attributes =>
+                    [
+                      {:regex_text => sequence.regex_text,
+                      :case_sensitive => sequence.case_sensitive,
+                      :sequence_type => sequence.sequence_type
+                    }
+                  ]
+                }
+                ]
+              }
+            )
+          }))
+        parsed_response = JSON.parse(response.body)
+        expect(response.code.to_i).to(eq(201))
+        expect(parsed_response["sequence_groups"][0]["sequences"][0]["regex_text"]).to(eq(sequence.regex_text))
+        expect(parsed_response["sequence_groups"][0]["sequences"][0]["case_sensitive"]).to(eq(sequence.case_sensitive))
+        expect(Sequence.count).to(eq(1))
+      end
     end
 
     context 'should show' do

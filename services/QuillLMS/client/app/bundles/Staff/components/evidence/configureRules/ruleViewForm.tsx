@@ -12,7 +12,7 @@ import { Spinner } from '../../../../Shared/index';
 import { deleteRule, fetchRules, fetchUniversalRules } from '../../../utils/evidence/ruleAPIs';
 import { fetchConcepts, } from '../../../utils/evidence/conceptAPIs';
 import { formatPrompts, renderErrorsContainer, renderHeader } from '../../../helpers/evidence';
-import { handleSubmitRule, getInitialRuleType, formatInitialFeedbacks, returnInitialFeedback, formatRegexRules, getReturnLinkRuleType, getReturnLinkLabel, renderDeleteRuleModal } from '../../../helpers/evidence/ruleHelpers';
+import { handleSubmitRule, getInitialRuleType, formatInitialFeedbacks, returnInitialFeedback, formatRegexRules, formatSequenceGroups, getReturnLinkRuleType, getReturnLinkLabel, renderDeleteRuleModal } from '../../../helpers/evidence/ruleHelpers';
 import { ruleOptimalOptions, regexRuleTypes, PLAGIARISM } from '../../../../../constants/evidence';
 import { RuleInterface, DropdownObjectInterface } from '../../../interfaces/evidenceInterfaces';
 
@@ -67,6 +67,7 @@ const RuleViewForm = ({
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [plagiarismText, setPlagiarismText] = React.useState<RuleInterface["plagiarism_text"]>(initialPlagiarismText);
   const [regexRules, setRegexRules] = React.useState<object>({});
+  const [sequenceGroups, setSequenceGroups] = React.useState<object>({});
   const [ruleConceptUID, setRuleConceptUID] = React.useState<string>(concept_uid || '');
   const [ruleNote, setRuleNote] = React.useState<string>(initalNote);
   const [ruleFeedbacks, setRuleFeedbacks] = React.useState<object>(initialFeedbacks);
@@ -103,6 +104,12 @@ const RuleViewForm = ({
   React.useEffect(() => {
     if(rule && rule.regex_rules) {
       formatRegexRules({ rule, setRegexRules });
+    }
+  }, [rule]);
+
+  React.useEffect(() => {
+    if(rule && rule.sequence_groups) {
+      formatSequenceGroups({ rule, setSequenceGroups });
     }
   }, [rule]);
 
@@ -245,6 +252,7 @@ const RuleViewForm = ({
           rulesToCreate={rulesToCreate}
           rulesToDelete={rulesToDelete}
           rulesToUpdate={rulesToUpdate}
+          sequenceGroups={sequenceGroups}
           setRegexFeedback={setRuleFeedbacks}
           setRegexRules={setRegexRules}
           setRulesToCreate={setRulesToCreate}

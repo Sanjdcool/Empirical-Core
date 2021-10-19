@@ -5,13 +5,16 @@ module Evidence
     belongs_to :rule, inverse_of: :sequence_groups
     has_many :sequences, inverse_of: :sequence_group, dependent: :destroy
 
+    accepts_nested_attributes_for :sequences
+
     validates_presence_of :rule
 
     def serializable_hash(options = nil)
       options ||= {}
 
       super(options.reverse_merge(
-        only: [:id, :rule_id]
+        only: [:id, :rule_id],
+        include: [:sequences],
       ))
     end
 

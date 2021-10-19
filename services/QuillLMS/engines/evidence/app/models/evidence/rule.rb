@@ -45,6 +45,7 @@ module Evidence
     accepts_nested_attributes_for :feedbacks, allow_destroy: true
     accepts_nested_attributes_for :label
     accepts_nested_attributes_for :regex_rules
+    accepts_nested_attributes_for :sequence_groups
 
     validates :uid, presence: true, uniqueness: true
     validates :name, presence: true, length: {maximum: MAX_NAME_LENGTH}
@@ -59,7 +60,7 @@ module Evidence
 
       super(options.reverse_merge(
         only: [:id, :uid, :name, :note, :universal, :rule_type, :optimal, :state, :suborder, :concept_uid, :prompt_ids],
-        include: [:plagiarism_text, :feedbacks, :label, :regex_rules],
+        include: [:plagiarism_text, :feedbacks, :label, :regex_rules, :sequence_groups],
         methods: [:prompt_ids, :display_name]
       ))
     end

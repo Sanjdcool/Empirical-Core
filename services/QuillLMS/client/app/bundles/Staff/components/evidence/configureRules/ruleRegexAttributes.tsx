@@ -7,6 +7,7 @@ import {
   handleSetRegexRule,
   handleSetRegexRuleSequence,
   handleAddRegexInput,
+  handleAddSequenceGroupInput,
   handleDeleteRegexRule,
   handleSetFeedback,
   renderHighlights
@@ -24,6 +25,7 @@ const RuleRegexAttributes = ({
   rulesToUpdate,
   rulesToCreate,
   rulesToDelete,
+  sequenceGroups,
   setRulesToDelete,
   setRegexRules,
   setRulesToUpdate,
@@ -31,9 +33,13 @@ const RuleRegexAttributes = ({
   setRegexFeedback,
 }) => {
 
-  function onHandleSetRegexRule(e: InputEvent) {
+  function onHandleSetRegexRule(e: InputEvent, keyValue: string, index: number) {
+    console.log("handling")
+    console.log(keyValue)
+    console.log(index)
     handleSetRegexRule({
     e,
+    index,
     regexRules,
     rulesToUpdate,
     rulesToCreate,
@@ -42,11 +48,13 @@ const RuleRegexAttributes = ({
     setRulesToCreate})
   }
 
-  function onHandleSetRegexRuleSequence(option: DropdownObjectInterface, ruleKey) {
-    handleSetRegexRuleSequence({ option, ruleKey, regexRules, setRegexRules });
+  function onHandleSetRegexRuleSequence(option: DropdownObjectInterface, ruleKey, index) {
+    handleSetRegexRuleSequence({ option, ruleKey, index, regexRules, setRegexRules });
   }
 
   function onHandleAddRegexInput() { handleAddRegexInput(regexRules, setRegexRules) }
+
+  function onHandleAddSequenceGroupInput() { handleAddSequenceGroupInput(regexRules, setRegexRules) }
 
   function onHandleDeleteRegexRule(e) { handleDeleteRegexRule({ e, regexRules, rulesToDelete, setRulesToDelete, setRegexRules}) }
 
@@ -113,10 +121,12 @@ const RuleRegexAttributes = ({
       <RegexRules
         errors={errors}
         handleAddRegexInput={onHandleAddRegexInput}
+        handleAddSequenceGroupInput={onHandleAddSequenceGroupInput}
         handleDeleteRegexRule={onHandleDeleteRegexRule}
         handleSetRegexRule={onHandleSetRegexRule}
         handleSetRegexRuleSequence={onHandleSetRegexRuleSequence}
         regexRules={regexRules}
+        sequenceGroups={sequenceGroups}
       />
     </React.Fragment>
   );

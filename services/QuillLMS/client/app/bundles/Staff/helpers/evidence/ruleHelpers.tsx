@@ -51,14 +51,17 @@ export function handleRulePromptChange(e: InputEvent, rulePrompts, setRulePrompt
   setRulePrompts(updatedPrompts);
 };
 
-export function handleSetRegexRuleSequence({ option, ruleKey, regexRules, setRegexRules }) {
+export function handleSetRegexRuleSequence({ option, ruleKey, index, regexRules, setRegexRules }) {
   const updatedRules = {...regexRules};
-  updatedRules[ruleKey].sequence_type = option;
+  console.log("seeing it here")
+  if (!index) index = 0
+  updatedRules[ruleKey][index].sequence_type = option.value;
   setRegexRules(updatedRules);
 }
 
 export function handleSetRegexRule({
   e,
+  index,
   regexRules,
   rulesToUpdate,
   rulesToCreate,
@@ -69,10 +72,18 @@ export function handleSetRegexRule({
   const { target } = e;
   const { id, type, value } = target;
   let updatedRules = {...regexRules};
+  if (!index) {
+    index = 0
+  }
+  console.log(index)
+  console.log(target)
+  console.log(id)
+  console.log(type)
+  console.log(value)
   if(type === 'checkbox') {
-    updatedRules[value].case_sensitive = !regexRules[value].case_sensitive;
+    updatedRules[value][index].case_sensitive = !regexRules[value][index].case_sensitive;
   } else {
-    updatedRules[id].regex_text = value;
+    updatedRules[id][index].regex_text = value;
   }
   const rule = updatedRules[value] || updatedRules[id];
   if(rule.id) {
@@ -84,18 +95,32 @@ export function handleSetRegexRule({
     updatedHash[rule] = rule;
     setRulesToCreate(updatedHash);
   }
+  console.log(updatedRules)
   setRegexRules(updatedRules);
 }
 
 export function handleAddRegexInput(regexRules, setRegexRules) {
   let updatedRules = {...regexRules};
   let id = Object.keys(updatedRules).length;
-  const newRegexRule = { regex_text: '', case_sensitive: false };
+  const newRegexRule = [{ regex_text: '', case_sensitive: false, sequence_type: 'incorrect' }];
   // increment id so exisiting rules are not overwritten
   while(updatedRules[`regex-rule-${id}`] ) {
     id += 1;
   }
   updatedRules[`regex-rule-${id}`] = newRegexRule;
+  setRegexRules(updatedRules);
+}
+
+export function handleAddSequenceGroupInput(regexRules, setRegexRules) {
+  let updatedRules = {...regexRules};
+  let id = Object.keys(updatedRules).length;
+  const newRegexRule = [{ regex_text: '', case_sensitive: false, sequence_type: 'incorrect' }, { regex_text: '', case_sensitive: false, sequence_type: 'incorrect' }];
+  // increment id so exisiting rules are not overwritten
+  while(updatedRules[`regex-rule-${id}`] ) {
+    id += 1;
+  }
+  updatedRules[`regex-rule-${id}`] = newRegexRule;
+  console.log(updatedRules)
   setRegexRules(updatedRules);
 }
 
@@ -135,6 +160,24 @@ export const formatRegexRules = ({ rule, setRegexRules }) => {
     formatted[`regex-rule-${i}`] = formattedRule;
   });
   setRegexRules(formatted);
+}
+
+export const formatSequenceGroups = ({ rule, setSequenceGroups }) => {
+  let formatted = {};
+  rule && rule.sequence_groups && rule.sequence_groups.map((rule, i) => {
+    console.log("rule is")
+    console.log(rule)
+    const { case_sensitive, id, regex_text, sequence_type } = rule.sequences[0];
+    const regexRuleSequenceType = getSequenceType(sequence_type);
+    const formattedRule = {
+      id: id,
+      case_sensitive: case_sensitive,
+      regex_text: regex_text,
+      sequence_type: regexRuleSequenceType
+    }
+    formatted[`sequence-group-${i}`] = formattedRule;
+  });
+  setSequenceGroups(formatted);
 }
 
 export function handleSetFeedback({
@@ -325,10 +368,15 @@ export const buildRule = ({
     // format from DropdownInput option
     rules = rules.map(rule => {
       // choose default Incorrect option for case where user doesn't change dropdown option
-      rule.sequence_type = rule.sequence_type && rule.sequence_type.value ? rule.sequence_type.value : regexRuleSequenceOptions[0].value;
-      return rule;
+      // rule.sequence_type = rule.sequence_type && rule.sequence_type.value ? rule.sequence_type.value : regexRuleSequenceOptions[0].value;
+      let ruleVals = rule
+      let newSeqObj = {}
+      newSeqObj["sequences_attributes"] = ruleVals
+      return newSeqObj;
     });
-    newOrUpdatedRule.regex_rules_attributes = rules;
+    console.log("new rules with update")
+    console.log(rules)
+    newOrUpdatedRule.sequence_groups_attributes = rules;
   } else if(newOrUpdatedRule.rule_type === PLAGIARISM) {
     newOrUpdatedRule.plagiarism_text_attributes = {
       id: plagiarismText.id,
@@ -385,10 +433,19 @@ export async function handleSubmitRule({
   let state: any[] = [ruleName, ruleConceptUID];
   if(regexRuleTypes.includes(ruleType.value)) {
     keys.push('Regex Feedback');
-    state.push(ruleFeedbacks[0].text);
+    //state.push(ruleFeedbacks[0].text);
+    state.push("placeholder feedback")
+    console.log(regexRules)
     Object.keys(regexRules).map((key, i) => {
-      keys.push(`Regex rule ${i + 1}`);
-      state.push(regexRules[key].regex_text);
+      if (regexRules[key].length === 2) {
+        keys.push(`Regex rule ${i + 1}a`);
+        state.push(regexRules[key][0].regex_text);
+        keys.push(`Regex rule ${i + 1}b`);
+        state.push(regexRules[key][1].regex_text);
+      } else {
+        keys.push(`Regex rule ${i + 1}`);
+        state.push(regexRules[key][0].regex_text);
+      }
     });
   } else if(ruleType.value === PLAGIARISM) {
     keys = keys.concat(['Plagiarism Text', 'First Plagiarism Feedback', 'Second Plagiarism Feedback']);
