@@ -71,7 +71,7 @@ func AssembleUrls() ([api_count]string) {
 		spell_check_bing             = fmt.Sprintf("%s/api/v1/evidence/feedback/spelling.json", lms_domain)
 
 		grammar_check_api = "https://quill.spell.services/Quill/grammar/predict"
-		opinion_check_api = fmt.Sprintf("%s/", opinion_domain)
+		opinion_check_api = fmt.Sprintf("%s/api/v1/evidence/opinion/fetch", opinion_domain)
 	)
 
 	var urls = [...]string{
