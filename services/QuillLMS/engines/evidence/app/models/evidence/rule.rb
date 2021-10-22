@@ -39,13 +39,11 @@ module Evidence
     has_many :prompts_rules, inverse_of: :rule
     has_many :prompts, through: :prompts_rules, inverse_of: :rules
     has_many :regex_rules, inverse_of: :rule, dependent: :destroy
-    has_many :sequence_groups, inverse_of: :rule, dependent: :destroy
 
     accepts_nested_attributes_for :plagiarism_text
     accepts_nested_attributes_for :feedbacks, allow_destroy: true
     accepts_nested_attributes_for :label
     accepts_nested_attributes_for :regex_rules
-    accepts_nested_attributes_for :sequence_groups
 
     validates :uid, presence: true, uniqueness: true
     validates :name, presence: true, length: {maximum: MAX_NAME_LENGTH}
@@ -60,7 +58,7 @@ module Evidence
 
       super(options.reverse_merge(
         only: [:id, :uid, :name, :note, :universal, :rule_type, :optimal, :state, :suborder, :concept_uid, :prompt_ids],
-        include: [:plagiarism_text, :feedbacks, :label, :regex_rules, :sequence_groups],
+        include: [:plagiarism_text, :feedbacks, :label, :regex_rules],
         methods: [:prompt_ids, :display_name]
       ))
     end
@@ -74,8 +72,23 @@ module Evidence
     end
 
     def regex_is_passing?(entry)
-      return true if sequence_groups.empty?
-      all_regex_rules_passing?(entry)
+      return true if regex_rules.empty?
+      if regex_rules.first.conditional?
+        grade_sequences_conditionally(entry)
+      else
+        grade_sequences_separately(entry)
+      end
+    end
+
+    def grade_sequences_separately(entry)
+      all_incorrect_sequences_passing?(entry) && at_least_one_required_sequence_passing?(entry)
+    end
+
+    def grade_sequences_conditionally(entry)
+      if !all_incorrect_sequences_passing?(entry)
+        return at_least_one_required_sequence_passing?(entry)
+      end
+      return true
     end
 
     def display_name
@@ -139,11 +152,26 @@ module Evidence
       prompts.map(&:conjunction)
     end
 
-    private def all_regex_rules_passing?(entry)
-      must_pass_all_sequences = sequence_groups.select {|sg| sg.has_dual_sequences? || sg.has_single_incorrect_sequence? }
-      must_pass_any_sequence = sequence_groups.select {|sg| sg.has_single_required_sequence? }
-      return (must_pass_all_sequences.empty? || must_pass_all_sequences.all? {|s| s.entry_passing?(entry)}) &&
-      (must_pass_any_sequence.empty? || must_pass_any_sequence.any? {|t| t.entry_passing?(entry)})
+    private def all_incorrect_sequences_passing?(entry)
+      return true if incorrect_sequences.empty?
+      incorrect_sequences.none? do |regex_rule|
+        regex_rule.entry_failing?(entry)
+      end
+    end
+
+    private def at_least_one_required_sequence_passing?(entry)
+      return true if required_sequences.empty?
+      required_sequences.any? do |regex_rule|
+        !regex_rule.entry_failing?(entry)
+      end
+    end
+
+    private def incorrect_sequences
+      regex_rules.where(sequence_type: RegexRule::TYPE_INCORRECT)
+    end
+
+    private def required_sequences
+      regex_rules.where(sequence_type: RegexRule::TYPE_REQUIRED)
     end
 
     private def assign_uid_if_missing

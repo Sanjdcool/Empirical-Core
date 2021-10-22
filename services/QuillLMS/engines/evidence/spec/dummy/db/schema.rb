@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< Updated upstream
 ActiveRecord::Schema.define(version: 20211014150016) do
+=======
+ActiveRecord::Schema.define(version: 20211022145011) do
+>>>>>>> Stashed changes
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -136,6 +140,7 @@ ActiveRecord::Schema.define(version: 20211014150016) do
     t.datetime "updated_at", null: false
     t.integer "rule_id"
     t.text "sequence_type", default: "incorrect", null: false
+    t.boolean "conditional", default: false
     t.index ["rule_id"], name: "index_comprehension_regex_rules_on_rule_id"
   end
 
