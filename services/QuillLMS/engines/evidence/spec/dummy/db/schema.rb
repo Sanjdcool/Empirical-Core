@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< Updated upstream
-ActiveRecord::Schema.define(version: 20211014150016) do
-=======
 ActiveRecord::Schema.define(version: 20211022145011) do
->>>>>>> Stashed changes
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -176,25 +172,6 @@ ActiveRecord::Schema.define(version: 20211022145011) do
     t.datetime "updated_at", null: false
     t.index ["activity_id"], name: "index_comprehension_turking_rounds_on_activity_id"
     t.index ["uuid"], name: "index_comprehension_turking_rounds_on_uuid", unique: true
-  end
-
-  create_table "evidence_sequence_groups", force: :cascade do |t|
-    t.integer "rule_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "evidence_rule_id"
-    t.index ["evidence_rule_id"], name: "index_evidence_sequence_groups_on_evidence_rule_id"
-  end
-
-  create_table "evidence_sequences", force: :cascade do |t|
-    t.integer "sequence_group_id", null: false
-    t.string "regex_text", limit: 200, null: false
-    t.boolean "case_sensitive", null: false
-    t.string "sequence_type", default: "incorrect", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "evidence_sequence_group_id"
-    t.index ["evidence_sequence_group_id"], name: "index_evidence_sequences_on_evidence_sequence_group_id"
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

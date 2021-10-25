@@ -5,7 +5,7 @@ module Evidence
 
     # GET /rules.json
     def index
-      @rules = Evidence::Rule.includes(:plagiarism_text, :feedbacks, :label, :regex_rules)
+      @rules = Evidence::Rule
       @rules = @rules.joins(:prompts_rules).where(comprehension_prompts_rules: {prompt_id: params[:prompt_id].split(',')}) if params[:prompt_id]
       @rules = @rules.where(rule_type: params[:rule_type]) if params[:rule_type]
 
@@ -73,8 +73,7 @@ module Evidence
          plagiarism_text_attributes: [:id, :text],
          regex_rules_attributes: [:id, :regex_text, :case_sensitive, :sequence_type, :conditional],
          label_attributes: [:id, :name, :state],
-         feedbacks_attributes: [:id, :text, :description, :order, highlights_attributes: [:id, :text, :highlight_type, :starting_index, :_destroy]],
-         sequence_groups_attributes: [:id, sequences_attributes: [:id, :regex_text, :case_sensitive, :sequence_type]]
+         feedbacks_attributes: [:id, :text, :description, :order, highlights_attributes: [:id, :text, :highlight_type, :starting_index, :_destroy]]
       )
     end
 
