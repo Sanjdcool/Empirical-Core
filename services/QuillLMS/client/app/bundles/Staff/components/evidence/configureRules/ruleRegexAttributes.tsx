@@ -7,7 +7,6 @@ import {
   handleSetRegexRule,
   handleSetRegexRuleSequence,
   handleAddRegexInput,
-  handleAddSequenceGroupInput,
   handleDeleteRegexRule,
   handleSetFeedback,
   renderHighlights
@@ -20,26 +19,24 @@ import { InputEvent, ClickEvent, DropdownObjectInterface } from '../../../interf
 
 const RuleRegexAttributes = ({
   errors,
+  ruleConditional,
   regexFeedback,
   regexRules,
   rulesToUpdate,
   rulesToCreate,
   rulesToDelete,
-  sequenceGroups,
   setRulesToDelete,
   setRegexRules,
   setRulesToUpdate,
   setRulesToCreate,
   setRegexFeedback,
+  setRuleConditional
 }) => {
+  // const [conditional, setConditional] = React.useState<boolean>(regexConditional);
 
-  function onHandleSetRegexRule(e: InputEvent, keyValue: string, index: number) {
-    console.log("handling")
-    console.log(keyValue)
-    console.log(index)
+  function onHandleSetRegexRule(e: InputEvent) {
     handleSetRegexRule({
     e,
-    index,
     regexRules,
     rulesToUpdate,
     rulesToCreate,
@@ -48,13 +45,11 @@ const RuleRegexAttributes = ({
     setRulesToCreate})
   }
 
-  function onHandleSetRegexRuleSequence(option: DropdownObjectInterface, ruleKey, index) {
-    handleSetRegexRuleSequence({ option, ruleKey, index, regexRules, setRegexRules });
+  function onHandleSetRegexRuleSequence(option: DropdownObjectInterface, ruleKey) {
+    handleSetRegexRuleSequence({ option, ruleKey, regexRules, setRegexRules });
   }
 
   function onHandleAddRegexInput() { handleAddRegexInput(regexRules, setRegexRules) }
-
-  function onHandleAddSequenceGroupInput() { handleAddSequenceGroupInput(regexRules, setRegexRules) }
 
   function onHandleDeleteRegexRule(e) { handleDeleteRegexRule({ e, regexRules, rulesToDelete, setRulesToDelete, setRegexRules}) }
 
@@ -98,6 +93,10 @@ const RuleRegexAttributes = ({
     }
   }
 
+  function onHandleToggleConditional() {
+    setRuleConditional(!ruleConditional)
+  }
+
   // TODO: break out Regex feedback into separate component
 
   return(
@@ -117,16 +116,25 @@ const RuleRegexAttributes = ({
         {regexFeedback[0].highlights_attributes && regexFeedback[0].highlights_attributes.filter(h => !h._destroy) && regexFeedback[0].highlights_attributes.filter(h => !h._destroy).length ? <button className="remove-highlight quill-button small secondary outlined" onClick={onHandleRemoveFeedbackHighlight} type="button" value="0">Remove Highlight</button> : null}
       </div>)}
       {errors['Regex Feedback'] && <p className="error-message">{errors['Regex Feedback']}</p>}
-      <p className="form-subsection-label" id="regex-rules-label">Sequence Groups</p>
+      <label aria-label="conditional-sequence-label" className="conditional-label" htmlFor="conditional-label">
+        Conditional Sequences?
+      </label>
+      <input
+        aria-label="conditional-checkbox"
+        checked={ruleConditional}
+        id="conditional-checkbox"
+        onChange={onHandleToggleConditional}
+        type="checkbox"
+        value="conditional-checkbox"
+      />
+      <p className="form-subsection-label" id="regex-rules-label">Sequences</p>
       <RegexRules
         errors={errors}
         handleAddRegexInput={onHandleAddRegexInput}
-        handleAddSequenceGroupInput={onHandleAddSequenceGroupInput}
         handleDeleteRegexRule={onHandleDeleteRegexRule}
         handleSetRegexRule={onHandleSetRegexRule}
         handleSetRegexRuleSequence={onHandleSetRegexRuleSequence}
         regexRules={regexRules}
-        sequenceGroups={sequenceGroups}
       />
     </React.Fragment>
   );

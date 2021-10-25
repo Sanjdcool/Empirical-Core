@@ -107,6 +107,22 @@ module Evidence
       end
     end
 
+    describe '#conditional' do
+      it 'should return conditional state of first regex rule' do
+        required_rule = create(:evidence_rule)
+        regex_rule_three = create(:evidence_regex_rule, :rule => required_rule, :regex_text => "you need this sequence", :sequence_type => "required", :conditional => true)
+        expect(required_rule.conditional).to(eq(true))
+
+        regex_rule_three.update(conditional: false)
+        expect(required_rule.conditional).to eq(false)
+      end
+
+      it 'should return nil if rule is not regex type' do
+        required_rule = create(:evidence_rule, rule_type: Rule::TYPE_PLAGIARISM)
+        expect(required_rule.conditional).to eq(nil)
+      end
+    end
+
     context 'should regex_is_passing?' do
 
       context 'when the regex rules are not conditional' do

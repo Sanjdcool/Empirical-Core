@@ -31,19 +31,8 @@ export interface RegexRuleInterface {
   rule_id?: number,
   regex_text: string,
   case_sensitive: boolean,
-  sequence_type: string
-}
-
-export interface SequenceInterface {
-  regex_text: string,
-  case_sensitive: boolean,
-  sequence_type: string
-}
-
-export interface SequenceGroupInterface {
-  id?: number,
-  rule_id?: number,
-  sequences: SequenceInterface[]
+  sequence_type: string,
+  conditional: boolean,
 }
 
 export interface FlagInterface {
@@ -85,6 +74,7 @@ export interface RuleInterface {
   concept_uid: string,
   prompt_ids?: number[],
   state: string,
+  conditional?: boolean,
   label?: {
     id: number,
     name: string
@@ -96,7 +86,6 @@ export interface RuleInterface {
   }
   regex_rules?: RegexRuleInterface[]
   regex_rules_attributes?: RegexRuleInterface[]
-  sequence_groups_attributes?: SequenceGroupInterface[]
   feedbacks?: {
     id?: number,
     rule_id?: number,

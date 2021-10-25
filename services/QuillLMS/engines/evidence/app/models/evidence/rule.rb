@@ -59,7 +59,7 @@ module Evidence
       super(options.reverse_merge(
         only: [:id, :uid, :name, :note, :universal, :rule_type, :optimal, :state, :suborder, :concept_uid, :prompt_ids],
         include: [:plagiarism_text, :feedbacks, :label, :regex_rules],
-        methods: [:prompt_ids, :display_name]
+        methods: [:prompt_ids, :display_name, :conditional]
       ))
     end
 
@@ -150,6 +150,11 @@ module Evidence
     def conjunctions
       return nil if universal_rule_type?
       prompts.map(&:conjunction)
+    end
+
+    def conditional
+      return nil if !regex? || regex_rules.empty?
+      return regex_rules.first.conditional?
     end
 
     private def all_incorrect_sequences_passing?(entry)

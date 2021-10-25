@@ -12,7 +12,7 @@ import { Spinner } from '../../../../Shared/index';
 import { deleteRule, fetchRules, fetchUniversalRules } from '../../../utils/evidence/ruleAPIs';
 import { fetchConcepts, } from '../../../utils/evidence/conceptAPIs';
 import { formatPrompts, renderErrorsContainer, renderHeader } from '../../../helpers/evidence';
-import { handleSubmitRule, getInitialRuleType, formatInitialFeedbacks, returnInitialFeedback, formatRegexRules, formatSequenceGroups, getReturnLinkRuleType, getReturnLinkLabel, renderDeleteRuleModal } from '../../../helpers/evidence/ruleHelpers';
+import { handleSubmitRule, getInitialRuleType, formatInitialFeedbacks, returnInitialFeedback, formatRegexRules, getReturnLinkRuleType, getReturnLinkLabel, renderDeleteRuleModal } from '../../../helpers/evidence/ruleHelpers';
 import { ruleOptimalOptions, regexRuleTypes, PLAGIARISM } from '../../../../../constants/evidence';
 import { RuleInterface, DropdownObjectInterface } from '../../../interfaces/evidenceInterfaces';
 
@@ -53,7 +53,7 @@ const RuleViewForm = ({
   const { params } = match;
   const { promptId } = params;
 
-  const { name, rule_type, id, uid, optimal, plagiarism_text, concept_uid, note, feedbacks, state, label } = rule;
+  const { name, rule_type, id, uid, optimal, plagiarism_text, concept_uid, note, feedbacks, state, label, conditional } = rule;
 
   const initialRuleType = getInitialRuleType({ isUniversal, rule_type, universalRuleType: null});
   const initialRuleOptimal = optimal ? ruleOptimalOptions[0] : ruleOptimalOptions[1];
@@ -61,13 +61,14 @@ const RuleViewForm = ({
   const initalNote = note || '';
   const initialFeedbacks = feedbacks ? formatInitialFeedbacks(feedbacks) : returnInitialFeedback(initialRuleType.value);
   const initialLabel = label && label.name;
+  const initialConditional = conditional
   const ruleLabelStatus = state;
 
   const [errors, setErrors] = React.useState<object>({});
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [plagiarismText, setPlagiarismText] = React.useState<RuleInterface["plagiarism_text"]>(initialPlagiarismText);
   const [regexRules, setRegexRules] = React.useState<object>({});
-  const [sequenceGroups, setSequenceGroups] = React.useState<object>({});
+  const [ruleConditional, setRuleConditional] = React.useState<boolean>(initialConditional)
   const [ruleConceptUID, setRuleConceptUID] = React.useState<string>(concept_uid || '');
   const [ruleNote, setRuleNote] = React.useState<string>(initalNote);
   const [ruleFeedbacks, setRuleFeedbacks] = React.useState<object>(initialFeedbacks);
@@ -108,12 +109,6 @@ const RuleViewForm = ({
   }, [rule]);
 
   React.useEffect(() => {
-    if(rule && rule.sequence_groups) {
-      formatSequenceGroups({ rule, setSequenceGroups });
-    }
-  }, [rule]);
-
-  React.useEffect(() => {
     if(!rulesCount && rulesData && rulesData.rules) {
       const { rules } = rulesData;
       setRulesCount(rules.length);
@@ -139,6 +134,7 @@ const RuleViewForm = ({
       ruleLabelName,
       ruleConceptUID,
       ruleNote,
+      ruleConditional,
       ruleFeedbacks,
       ruleOptimal,
       rulePrompts,
@@ -249,12 +245,13 @@ const RuleViewForm = ({
           errors={errors}
           regexFeedback={ruleFeedbacks}
           regexRules={regexRules}
+          ruleConditional={ruleConditional}
           rulesToCreate={rulesToCreate}
           rulesToDelete={rulesToDelete}
           rulesToUpdate={rulesToUpdate}
-          sequenceGroups={sequenceGroups}
           setRegexFeedback={setRuleFeedbacks}
           setRegexRules={setRegexRules}
+          setRuleConditional={setRuleConditional}
           setRulesToCreate={setRulesToCreate}
           setRulesToDelete={setRulesToDelete}
           setRulesToUpdate={setRulesToUpdate}

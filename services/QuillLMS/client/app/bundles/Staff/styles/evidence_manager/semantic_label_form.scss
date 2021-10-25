@@ -85,6 +85,9 @@
         }
       }
     }
+    .conditional-label {
+     padding-right: 10px;
+    }
     .regex-rules-container {
       .regex-rule-container {
         display: flex;
@@ -92,21 +95,6 @@
         .regex-input-container {
           width: 100%;
           margin-right: 30px;
-          display: flex;
-          background-color: #cfcfcf;
-          border: 1px solid gray;
-          border-radius: 5px;
-          .sequence-container {
-            padding: 20px;
-            .input-container {
-              &.inactive {
-                input {
-                  min-height: 25px;
-                }
-                min-height: 58px;
-              }
-            }
-          }
           .checkbox-container {
             display: flex;
             align-items: center;
@@ -122,9 +110,6 @@
           padding: 0px 12px 5px 12px;
         }
       }
-    }
-    .add-sequences-buttons-container {
-      display: flex;
     }
     .add-regex-button {
       margin: 30px 10px 0px 0px;

@@ -345,7 +345,6 @@ export const handlePageFilterClick = ({
 
 export const validateForm = (keys: string[], state: any[], ruleType?: string) => {
   let errors = {};
-  console.log(state)
   state.map((value, i) => {
     switch(keys[i]) {
       case IMAGE_LINK:
@@ -383,8 +382,6 @@ export const validateForm = (keys: string[], state: any[], ruleType?: string) =>
       default:
         const strippedValue = value && stripHtml(value);
         if(!strippedValue || strippedValue.length === 0) {
-          console.log("error")
-          console.log(strippedValue)
           errors[keys[i]] = `${keys[i]} cannot be blank.`;
         }
      }

@@ -30,7 +30,7 @@ exports[`RuleRegexAttributes component should render RuleRegexAttributes 1`] = `
     className="form-subsection-label"
     id="regex-rules-label"
   >
-    Sequence Groups
+    Regex Rules
   </p>
   <RegexRules
     errors={Object {}}
