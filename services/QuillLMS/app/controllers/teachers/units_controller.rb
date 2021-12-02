@@ -353,9 +353,22 @@ class Teachers::UnitsController < ApplicationController
   private def diagnostics_organized_by_classroom
     classrooms = []
     diagnostic_records = diagnostic_unit_records
-    post_test_ids = diagnostic_records.map { |r| r['post_test_id'] }.compact
+    post_test_ids = diagnostic_records.map { |r| r['post_test_id'] }.compact.uniq
+
+    activity_ids = diagnostic_records.map { |r| r['activity_id'] }.compact.uniq
+
+    classroom_unit_ids = diagnostic_records.map { |record| record['classroom_unit_id'] }
+
+    sessions_by_activity = ActivitySession
+      .includes(:concept_results)
+      .where(classroom_unit_id: classroom_unit_ids,
+        activity_id: activity_ids,
+        state: 'finished')
+      .group_by(&:activity_id)
+
     diagnostic_records.each do |record|
-      next if post_test_ids.include?(record['activity_id'])
+      activity_id = record['activity_id']
+      next if post_test_ids.include?(activity_id)
 
       index_of_extant_classroom = classrooms.find_index { |c| c['id'] == record['classroom_id'] }
       name = grouped_name(record)
@@ -368,11 +381,19 @@ class Teachers::UnitsController < ApplicationController
       }
 
       if record['post_test_id']
-        post_test = record_with_aggregated_activity_sessions_and_skill_count(diagnostic_records, record['post_test_id'], record['classroom_id'], record['activity_id'])
+        post_test_sessions = sessions_by_activity[record['post_test_id']]
+          .sort_by(&:completed_at)
+          .uniq(&:user_id)
+
+        pre_test_sessions = sessions_by_activity[activity_id]
+          .sort_by(&:completed_at)
+          .uniq(&:user_id)
+
+        post_test = record_with_aggregated_activity_sessions_and_skill_count(diagnostic_records, post_test_sessions, record['post_test_id'], record['classroom_id'], pre_test_sessions)
         grouped_record[:post] = post_test || { activity_name: Activity.find_by_id(record['post_test_id'])&.name, unit_template_id: ActivitiesUnitTemplate.find_by_activity_id(record['post_test_id'])&.unit_template_id }
-        grouped_record[:pre] = record_with_aggregated_activity_sessions_and_skill_count(diagnostic_records, record['activity_id'], record['classroom_id'], nil)
+        grouped_record[:pre] = record_with_aggregated_activity_sessions_and_skill_count(diagnostic_records,pre_test_sessions, activity_id, record['classroom_id'], nil)
       else
-        grouped_record[:pre]['completed_count'] = ActivitySession.where(activity_id: record['activity_id'], classroom_unit_id: record['classroom_unit_id'], state: 'finished').size
+        grouped_record[:pre]['completed_count'] = sessions_by_activity[activity_id]&.size || 0
         grouped_record[:pre]['assigned_count'] = record['assigned_student_ids'].size
       end
       if index_of_extant_classroom
@@ -389,21 +410,21 @@ class Teachers::UnitsController < ApplicationController
     classrooms
   end
 
-  private def record_with_aggregated_activity_sessions_and_skill_count(diagnostic_records, activity_id, classroom_id, pre_test_activity_id)
+  private def record_with_aggregated_activity_sessions_and_skill_count(diagnostic_records, activity_sessions, activity_id, classroom_id, pre_test_sessions)
     records = diagnostic_records.select { |record| record['activity_id'] == activity_id && record['classroom_id'] == classroom_id }
     return if records.empty?
-    classroom_unit_ids = records.map { |record| record['classroom_unit_id'] }
-    activity_sessions = ActivitySession.where(activity_id: activity_id, classroom_unit_id: classroom_unit_ids, state: 'finished').order(completed_at: :desc).uniq { |activity_session| activity_session.user_id }
+
     record = records[0]
     return if !record
     record['completed_count'] = activity_sessions.size
     record['assigned_count'] = records.map { |r| r['assigned_student_ids'] }.flatten.uniq.size
     record['skills_count'] = 0
-    if pre_test_activity_id
+    if pre_test_sessions
       record['skills_count'] = activity_sessions.reduce(0) do |sum, as|
-        post_correct_skill_ids = as&.correct_skill_ids
-        pre_correct_skill_ids = ActivitySession.where(user_id: as.user_id, activity_id: pre_test_activity_id).order(completed_at: :desc).first&.correct_skill_ids
-        total_acquired_skills_count = post_correct_skill_ids && pre_correct_skill_ids ? (post_correct_skill_ids - pre_correct_skill_ids).length : 0
+        post_correct_skill_ids = as&.correct_skill_ids || []
+        pre_correct_skill_ids = pre_test_sessions.select {|session| session.user_id == as.user_id}&.correct_skill_ids || []
+
+        total_acquired_skills_count = (post_correct_skill_ids - pre_correct_skill_ids).length
         sum += total_acquired_skills_count > 0 ? total_acquired_skills_count : 0
       end
     end
