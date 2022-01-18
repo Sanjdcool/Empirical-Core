@@ -35,7 +35,7 @@ class Api::V1::ClassroomUnitsController < Api::ApiController
 
     data = params[:edition_id] ? { edition_id: params[:edition_id] } : {}
 
-    activity_sessions = ActivitySession.unscoped.where(classroom_unit_id: params[:classroom_unit_id], activity_id: params[:activity_id])
+    activity_sessions = ActivitySession.unscoped.where(classroom_unit_id: params[:classroom_unit_id], activity_id: activity.id)
 
     ActivitySession.mark_all_activity_sessions_complete(
       activity_sessions,
