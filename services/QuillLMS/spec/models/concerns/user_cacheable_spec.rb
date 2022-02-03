@@ -80,9 +80,15 @@ RSpec.describe UserCacheable, type: :model do
     let(:classroom) {create(:classroom) }
 
     it 'should call model_cache' do
-      expect(teacher).to receive(:model_cache).with(classroom, key: 'test.key', groups: {page: 1})
+      expect(teacher).to receive(:model_cache).with(classroom, key: 'test.key', groups: {page: 1}, expires_in: UserCacheable::DEFAULT_CACHE_EXPIRY)
 
       teacher.classroom_cache(classroom, key: 'test.key', groups: {page: 1})
+    end
+
+    it 'should call model_cache with expires_in' do
+      expect(teacher).to receive(:model_cache).with(classroom, key: 'test.key', groups: {page: 1}, expires_in: 1234)
+
+      teacher.classroom_cache(classroom, key: 'test.key', groups: {page: 1}, expires_in: 1234)
     end
 
     it 'should yield to model_cache' do
@@ -109,9 +115,15 @@ RSpec.describe UserCacheable, type: :model do
     let(:classroom_unit) {create(:classroom_unit) }
 
     it 'should call model_cache' do
-      expect(teacher).to receive(:model_cache).with(classroom_unit, key: 'test.key', groups: {page: 1})
+      expect(teacher).to receive(:model_cache).with(classroom_unit, key: 'test.key', groups: {page: 1}, expires_in: UserCacheable::DEFAULT_CACHE_EXPIRY)
 
       teacher.classroom_unit_cache(classroom_unit, key: 'test.key', groups: {page: 1})
+    end
+
+    it 'should call model_cache with expires_in' do
+      expect(teacher).to receive(:model_cache).with(classroom_unit, key: 'test.key', groups: {page: 1}, expires_in: 1234)
+
+      teacher.classroom_unit_cache(classroom_unit, key: 'test.key', groups: {page: 1}, expires_in: 1234)
     end
 
     it 'should yield to model_cache' do
@@ -144,13 +156,20 @@ RSpec.describe UserCacheable, type: :model do
     let(:classroom_unit2) {create(:classroom_unit, classroom: classroom, unit: unit_activity2.unit) }
 
     it 'should call model_cache with last updated unit if no unit_id' do
-      expect(teacher).to receive(:model_cache).with(classroom_unit2, key: 'test.key', groups: {page: 1})
+      expect(teacher).to receive(:model_cache).with(classroom_unit2, key: 'test.key', groups: {page: 1}, expires_in: UserCacheable::DEFAULT_CACHE_EXPIRY)
 
       teacher.classroom_unit_by_ids_cache(classroom_id: classroom.id, unit_id: nil, activity_id: activity.id, key: 'test.key', groups: {page: 1})
     end
 
+    it 'should call model_cache with expires_in' do
+      expect(teacher).to receive(:model_cache).with(classroom_unit2, key: 'test.key', groups: {page: 1}, expires_in: 1234)
+
+      teacher.classroom_unit_by_ids_cache(classroom_id: classroom.id, unit_id: nil, activity_id: activity.id, key: 'test.key', groups: {page: 1}, expires_in: 1234)
+    end
+
+
     it 'should call model_cache with first matching unit if there is a unit_id' do
-      expect(teacher).to receive(:model_cache).with(classroom_unit1, key: 'test.key', groups: {page: 1})
+      expect(teacher).to receive(:model_cache).with(classroom_unit1, key: 'test.key', groups: {page: 1}, expires_in: UserCacheable::DEFAULT_CACHE_EXPIRY)
 
       teacher.classroom_unit_by_ids_cache(classroom_id: classroom.id, unit_id: unit_activity1.unit_id, activity_id: activity.id, key: 'test.key', groups: {page: 1})
     end
@@ -203,6 +222,25 @@ RSpec.describe UserCacheable, type: :model do
 
     it 'should raise if not passed a block' do
       expect { user.send(:model_cache, object, key: 'test.key', groups: {}) }.to raise_error(LocalJumpError)
+    end
+
+    context 'expiration' do
+      let(:block) {Proc.new { return "hello" }}
+      let(:cache_key) { user.send(:model_cache_key, object, key: 'test.key', groups: {}) }
+
+      it 'pass expires_in onto Rails.cache.fetch' do
+
+        expect(Rails.cache).to receive(:fetch).with(cache_key, expires_in: 1234)
+
+        user.send(:model_cache, object, key: 'test.key', groups: {}, expires_in: 1234) {}
+      end
+
+      it 'uses default cache for Rails.cache.fetch if not passed in' do
+
+        expect(Rails.cache).to receive(:fetch).with(cache_key, expires_in: UserCacheable::DEFAULT_CACHE_EXPIRY)
+
+        user.send(:model_cache, object, key: 'test.key', groups: {}) {}
+      end
     end
 
     it 'should return cached value until the cache_key changes' do
