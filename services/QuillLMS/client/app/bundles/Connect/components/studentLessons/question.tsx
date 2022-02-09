@@ -18,7 +18,7 @@ import RenderFeedback from '../renderForQuestions/feedback';
 import getResponse from '../renderForQuestions/checkAnswer';
 import submitQuestionResponse from '../renderForQuestions/submitResponse.js';
 import updateResponseResource from '../renderForQuestions/updateResponseResource.js';
-import AnswerForm from '../renderForQuestions/renderFormForAnswer.jsx';
+import AnswerForm from '../renderForQuestions/renderFormForAnswerDragDrop.jsx';
 import {
   getMultipleChoiceResponseOptionsWithCallback,
   getGradedResponsesWithCallback
@@ -215,6 +215,24 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
     );
   }
 
+  renderTiles = () => {
+    const { question } = this.props;
+
+    const stems = question.prompt.split(/<p>|<\/p>/).filter(n => n).map((n) => n.replace(/\s$/, "")).map((n) => n.replace(/\.$/, "")).map((n) => n.charAt(0).toLowerCase() + n.slice(1))
+    const commas = Array.from({length: (stems.length - 1)}, (_) => ',')
+    const cues = question.cues
+    const endingPeriod = ['.']
+
+    const wordBlocks = stems.concat(commas,cues,endingPeriod).sort(() => (Math.random() > .5) ? 1 : -1)
+
+    return(
+      <ul>
+        {wordBlocks.map((words, i) => <li>{words}</li>)}
+      </ul>
+    );
+
+  }
+
   updateResponseResource(response) {
     const { dispatch, question } = this.props
     updateResponseResource(response, question.key, question.attempts, dispatch);
@@ -405,6 +423,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
         questionID,
         id: 'playQuestion',
         sentenceFragments: this.renderSentenceFragments(),
+        tiles: this.renderTiles(),
         cues: this.renderCues(),
         className: 'fubar',
         previewMode
