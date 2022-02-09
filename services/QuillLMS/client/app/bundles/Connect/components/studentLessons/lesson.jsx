@@ -5,7 +5,7 @@ import _ from 'lodash';
 
 import PlayLessonQuestion from './question';
 import PlaySentenceFragment from './sentenceFragment.jsx';
-import PlayFillInTheBlankQuestion from './fillInBlank.tsx'
+import PlayFillInTheBlankQuestion from './fillInBlank.tsx';
 import Finished from './finished.jsx';
 
 import SessionActions from '../../actions/sessions.js';

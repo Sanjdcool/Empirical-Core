@@ -2,6 +2,7 @@ declare function require(name:string);
 import * as React from 'react';
 import * as _ from 'underscore';
 import {Response} from 'quill-marking-logic'
+import { ReactSortable } from "react-sortablejs";
 
 import {
   SentenceFragments,
@@ -51,6 +52,7 @@ interface PlayLessonQuestionState {
   multipleChoiceCorrect?: boolean;
   multipleChoiceResponseOptions?: object[];
   sessionKey?: string;
+  list: { id: string; name: string }[];
 }
 
 export default class PlayLessonQuestion extends React.Component<PlayLessonQuestionProps,PlayLessonQuestionState> {
@@ -69,7 +71,8 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
       editing: false,
       response,
       finished: false,
-      multipleChoice: false
+      multipleChoice: false,
+      list: this.wordTiles(question)
     }
   }
 
@@ -105,6 +108,8 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
     }
     return false;
   }
+
+
 
   componentDidUpdate(prevProps) {
     const { question } = this.props;
@@ -215,20 +220,45 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
     );
   }
 
-  renderTiles = () => {
-    const { question } = this.props;
-
+  // returns array of form [{id: 1, name: "bats in darkness"}]
+  wordTiles = (question) => {
     const stems = question.prompt.split(/<p>|<\/p>/).filter(n => n).map((n) => n.replace(/\s$/, "")).map((n) => n.replace(/\.$/, "")).map((n) => n.charAt(0).toLowerCase() + n.slice(1))
     const commas = Array.from({length: (stems.length - 1)}, (_) => ',')
     const cues = question.cues
     const endingPeriod = ['.']
 
-    const wordBlocks = stems.concat(commas,cues,endingPeriod).sort(() => (Math.random() > .5) ? 1 : -1)
+    const allTiles = stems.concat(commas,cues,endingPeriod)
+    console.log(allTiles)
+    const tileObjects = allTiles.map((words, i) => ({id: i, name: words}))
+    console.log(tileObjects)
+
+    return tileObjects
+  }
+
+  renderTiles = () => {
+    // const { question } = this.props;
+
+    // const stems = question.prompt.split(/<p>|<\/p>/).filter(n => n).map((n) => n.replace(/\s$/, "")).map((n) => n.replace(/\.$/, "")).map((n) => n.charAt(0).toLowerCase() + n.slice(1))
+    // const commas = Array.from({length: (stems.length - 1)}, (_) => ',')
+    // const cues = question.cues
+    // const endingPeriod = ['.']
+
+    // const wordBlocks = stems.concat(commas,cues, endingPeriod) //.sort(() => (Math.random() > .5) ? 1 : -1)
 
     return(
-      <ul>
-        {wordBlocks.map((words, i) => <li>{words}</li>)}
-      </ul>
+      <ReactSortable
+        group="tiles"
+        list={this.state.list}
+        setList={(newState) => {
+          console.log(newState)
+          console.log(this.state.list)
+          this.setState({list: newState})
+        }}
+      >
+        {this.state.list.map((item, i) => (
+          <div className="dragTile" key={item.id}>{item.name}</div>
+        ))}
+      </ReactSortable>
     );
 
   }

@@ -4,6 +4,7 @@ import _ from 'underscore';
 import EndState from './renderEndState.jsx';
 import getAnswerState from './answerState';
 import { Modal } from '../../../Shared/index';
+import { ReactSortable } from "react-sortablejs";
 
 const getLatestAttempt = (attempts = []) => {
   const lastIndex = attempts.length - 1;
@@ -122,7 +123,14 @@ export default class RenderFormForAnswer extends React.Component {
 
     return (
       <div className="student-container">
-        {sentenceFragments}
+      <ReactSortable
+        className="answerList"
+        group="tiles"
+        list={[]}
+        setList={(newState) => {}}
+      >
+      </ReactSortable>
+
         <div className="content">
           {tiles}
           {renderedFeedback}

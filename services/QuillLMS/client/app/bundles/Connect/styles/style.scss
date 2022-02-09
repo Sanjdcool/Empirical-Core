@@ -37,6 +37,24 @@ body {
   }
 
 }
+.answerList {
+  background-color: white;
+  border-bottom: 2px solid #82ccdd;
+  height: 80px;
+  width: 100%;
+}
+
+.dragTile {
+  background-color: #82ccdd;
+  font-weight: 500;
+  font-size: 22px;
+  border: 1px solid white;
+  margin-right: 10px;
+  display: inline;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 3px 3px #ced6e0;
+}
 
 #pie-chart {
   svg {
