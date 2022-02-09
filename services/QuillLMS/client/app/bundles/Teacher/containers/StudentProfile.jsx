@@ -2,6 +2,7 @@ import React from 'react';
 import Pusher from 'pusher-js';
 import { connect } from 'react-redux';
 import qs from 'qs'
+import Confetti from 'react-confetti'
 
 import StudentProfileUnits from '../components/student_profile/student_profile_units.jsx';
 import StudentProfileHeader from '../components/student_profile/student_profile_header';
@@ -118,7 +119,27 @@ class StudentProfile extends React.Component {
 
     if (loading) { return <LoadingIndicator /> }
 
-    if (!selectedClassroomId) { return (<SelectAClassroom classrooms={classrooms} isBeingPreviewed={isBeingPreviewed} onClickCard={this.handleClassroomTabClick} />)}
+    if (!selectedClassroomId) { return (
+      <div className="student-profile-container">
+        <Confetti
+          height={window.innerHeight}
+          numberOfPieces={700}
+          recycle={false}
+          width={window.innerWidth}
+        />
+        <div className="achievements-section">
+          <div className="achievements-banner">
+            <div className="text-section">
+              <p>You've reached</p>
+              <p className="status">Gold</p>
+              <p>status! Check out your settings to see new unlocked customization options!</p>
+            </div>
+            <div className="icons-section"/>
+          </div>
+        </div>
+        <SelectAClassroom classrooms={classrooms} isBeingPreviewed={isBeingPreviewed} onClickCard={this.handleClassroomTabClick} />
+      </div>
+    )}
 
     return (
       <div className="student-profile-container">

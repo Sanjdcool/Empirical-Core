@@ -23,6 +23,13 @@
       img {
         margin-right: 8px;
       }
+      .avatar {
+        margin-right: 8px;
+        background-size: cover;
+        width: 32px;
+        height: 32px;
+        background-image: image-url('achievements/avatar');
+      }
     }
     .dropdown-menu {
       display: flex;
@@ -49,6 +56,23 @@
 
   .student-navbar-item {
     margin-left: 24px;
+  }
+
+  .customization {
+    color: white;
+    animation: successpulse 1.5s 1;
+    animation-delay: 6s;
+    @keyframes successpulse {
+      0%  {
+        color: white;
+      }
+      50% {
+        color: #CBAB02;
+      }
+      100% {
+        color: white;
+      }
+    }
   }
 
 

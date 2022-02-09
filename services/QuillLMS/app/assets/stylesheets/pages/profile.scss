@@ -12,6 +12,47 @@
     }
   }
 
+  .achievements-section {
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
+    max-width: 980px;
+    margin: auto;
+    position: relative;
+    padding: 0px 15px 0px 15px;
+    margin-top: 48px;
+    .achievements-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      border-radius: 3px;
+      padding: 16px 8px 16px 8px;
+      border: 1px solid #CBAB02;
+      box-shadow: 2px 2px #cbab02;
+      .text-section {
+        display: flex;
+        align-items: baseline;
+        p {
+          font-size: 16px;
+        }
+        .status {
+          margin: 0px 4px 0px 4px;
+          font-size: 18px;
+          font-weight: 1000;
+          color: #CBAB02;
+        }
+      }
+      .icons-section {
+        background-size: cover;
+        width: 120px;
+        height: 32px;
+        background-image: image-url('achievements/icons');
+        margin-right: 8px;
+      }
+    }
+  }
+
   #student-profile {
     -webkit-font-smoothing: antialiased;
     -moz-font-smoothing: antialiased;
