@@ -37,15 +37,25 @@ body {
   }
 
 }
+.hidden {
+  display: none;
+}
 .answerList {
   background-color: white;
   border-bottom: 2px solid #82ccdd;
-  height: 80px;
+  height: 50px;
   width: 100%;
 }
 
 .dragTile {
-  background-color: #82ccdd;
+  &.stem { background-color: #7efff5; }
+  &.comma { background-color: #7bed9f; }
+  &.cue { background-color: #ff6b81; }
+  &.period { background-color: #7bed9f; }
+
+}
+
+.dragTile {
   font-weight: 500;
   font-size: 22px;
   border: 1px solid white;

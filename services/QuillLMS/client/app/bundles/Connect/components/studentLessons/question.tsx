@@ -52,8 +52,8 @@ interface PlayLessonQuestionState {
   multipleChoiceCorrect?: boolean;
   multipleChoiceResponseOptions?: object[];
   sessionKey?: string;
-  list: { id: string; name: string }[];
-  answerList: { id: string; name: string }[];
+  list: { id: string; name: string, style: string }[];
+  answerList: { id: string; name: string, style: string }[];
 }
 
 export default class PlayLessonQuestion extends React.Component<PlayLessonQuestionProps,PlayLessonQuestionState> {
@@ -231,14 +231,17 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
       filter(n => n).
       map((n) => n.replace(/\s$/, "")).
       map((n) => n.replace(/\.$/, "")).
-      map((n) => n.charAt(0).toLowerCase() + n.slice(1))
-    const commas = Array.from({length: (stems.length - 1)}, (_) => ',')
-    const cues = question.cues
-    const endingPeriod = ['.']
+      map((n) => n.charAt(0).toLowerCase() + n.slice(1)).
+      map((n) => [n, 'stem'])
+    const commas = Array.from({length: (stems.length - 1)}, (_) => ',').
+      map((n) => [n, 'comma'])
+    const cues = question.cues.
+      map((n) => [n, 'cue'])
+    const endingPeriod = [['.', 'period']
 
     const allTiles = stems.concat(commas,cues,endingPeriod)
     console.log(allTiles)
-    const tileObjects = allTiles.map((words, i) => ({id: String(i), name: words}))
+    const tileObjects = allTiles.map((words, i) => ({id: String(i), name: words[0], style: words[1]}))
     console.log(tileObjects)
 
     return tileObjects
@@ -247,6 +250,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
   renderTiles = () => {
     return(
       <ReactSortable
+        className="tileList"
         group="tiles"
         list={this.state.list}
         setList={(newState) => {
@@ -258,7 +262,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
         }}
       >
         {this.state.list.map((item) => (
-          <div className="dragTile" key={item.id}>{item.name}</div>
+          <div className={`dragTile ${item.style}`} key={item.id}>{item.name}</div>
         ))}
       </ReactSortable>
     );
@@ -280,8 +284,8 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
           this.setState({answerList: newState, response: capitalNewResponse, editing: true})
         }}
       >
-        {this.state.answerList.map((item) => (
-          <div className="dragTile" key={item.id}>{item.name}</div>
+        {this.state.answerList.map((item, i) => (
+          <div className={`dragTile ${item.style}`} key={item.id}>{i === 0 ? (item.name.charAt(0).toUpperCase() + item.name.slice(1)) : item.name}</div>
         ))}
       </ReactSortable>
     );
