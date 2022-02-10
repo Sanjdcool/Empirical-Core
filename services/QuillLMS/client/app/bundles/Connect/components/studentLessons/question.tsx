@@ -53,6 +53,7 @@ interface PlayLessonQuestionState {
   multipleChoiceResponseOptions?: object[];
   sessionKey?: string;
   list: { id: string; name: string }[];
+  answerList: { id: string; name: string }[];
 }
 
 export default class PlayLessonQuestion extends React.Component<PlayLessonQuestionProps,PlayLessonQuestionState> {
@@ -72,7 +73,8 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
       response,
       finished: false,
       multipleChoice: false,
-      list: this.wordTiles(question)
+      list: this.wordTiles(question),
+      answerList: [],
     }
   }
 
@@ -224,7 +226,12 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
 
   // returns array of form [{id: 1, name: "bats in darkness"}]
   wordTiles = (question) => {
-    const stems = question.prompt.split(/<p>|<\/p>/).filter(n => n).map((n) => n.replace(/\s$/, "")).map((n) => n.replace(/\.$/, "")).map((n) => n.charAt(0).toLowerCase() + n.slice(1))
+    const stems = question.prompt.
+      split(/<p>|<\/p>/).
+      filter(n => n).
+      map((n) => n.replace(/\s$/, "")).
+      map((n) => n.replace(/\.$/, "")).
+      map((n) => n.charAt(0).toLowerCase() + n.slice(1))
     const commas = Array.from({length: (stems.length - 1)}, (_) => ',')
     const cues = question.cues
     const endingPeriod = ['.']
@@ -238,15 +245,6 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
   }
 
   renderTiles = () => {
-    // const { question } = this.props;
-
-    // const stems = question.prompt.split(/<p>|<\/p>/).filter(n => n).map((n) => n.replace(/\s$/, "")).map((n) => n.replace(/\.$/, "")).map((n) => n.charAt(0).toLowerCase() + n.slice(1))
-    // const commas = Array.from({length: (stems.length - 1)}, (_) => ',')
-    // const cues = question.cues
-    // const endingPeriod = ['.']
-
-    // const wordBlocks = stems.concat(commas,cues, endingPeriod) //.sort(() => (Math.random() > .5) ? 1 : -1)
-
     return(
       <ReactSortable
         group="tiles"
@@ -265,6 +263,28 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
       </ReactSortable>
     );
 
+  }
+
+  renderAnswerTiles = () => {
+    return(
+        <ReactSortable
+        className="answerList"
+        group="tiles"
+        list={this.state.answerList}
+        setList={(newState) => {
+          const newResponse = newState.map((word) => word.name).
+            join(' ').
+            replace(' ,', ',').
+            replace(' .', '.')
+          const capitalNewResponse = newResponse.charAt(0).toUpperCase() + newResponse.slice(1)
+          this.setState({answerList: newState, response: capitalNewResponse, editing: true})
+        }}
+      >
+        {this.state.answerList.map((item) => (
+          <div className="dragTile" key={item.id}>{item.name}</div>
+        ))}
+      </ReactSortable>
+    );
   }
 
   updateResponseResource(response) {
@@ -295,6 +315,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
   }
 
   toggleDisabled = () => {
+    return ''
     const { editing, } = this.state
     if (editing && this.getResponses() && Object.keys(this.getResponses()).length) {
       return '';
@@ -342,7 +363,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
     const { nextQuestion, } = this.props
 
     nextQuestion();
-    this.setState({ response: '', });
+    this.setState({ response: '', answerList: []});
   }
 
   renderNextQuestionButton = () => {
@@ -458,6 +479,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
         id: 'playQuestion',
         sentenceFragments: this.renderSentenceFragments(),
         tiles: this.renderTiles(),
+        answerTiles: this.renderAnswerTiles(),
         cues: this.renderCues(),
         className: 'fubar',
         previewMode
