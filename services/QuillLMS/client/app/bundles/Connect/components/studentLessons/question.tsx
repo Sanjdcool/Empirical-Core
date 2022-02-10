@@ -93,6 +93,8 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
   }
 
   shouldComponentUpdate(nextProps: PlayLessonQuestionProps, nextState: PlayLessonQuestionState) {
+    // Discovering that the component wasn't always updating made me yell several explitives.
+    return true;
     const { question, } = this.props
     const { response, finished, multipleChoice, responses} = this.state
     if (question !== nextProps.question) {
@@ -229,7 +231,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
 
     const allTiles = stems.concat(commas,cues,endingPeriod)
     console.log(allTiles)
-    const tileObjects = allTiles.map((words, i) => ({id: i, name: words}))
+    const tileObjects = allTiles.map((words, i) => ({id: String(i), name: words}))
     console.log(tileObjects)
 
     return tileObjects
@@ -250,12 +252,14 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
         group="tiles"
         list={this.state.list}
         setList={(newState) => {
-          console.log(newState)
+
           console.log(this.state.list)
+          console.log(newState)
           this.setState({list: newState})
+          console.log(this.state.list)
         }}
       >
-        {this.state.list.map((item, i) => (
+        {this.state.list.map((item) => (
           <div className="dragTile" key={item.id}>{item.name}</div>
         ))}
       </ReactSortable>

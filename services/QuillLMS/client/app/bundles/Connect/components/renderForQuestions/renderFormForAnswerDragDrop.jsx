@@ -15,7 +15,7 @@ export default class RenderFormForAnswer extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { modalOpen: false, }
+    this.state = { modalOpen: false, answerList: [] }
   }
 
   getHelpModal = () => {
@@ -126,9 +126,12 @@ export default class RenderFormForAnswer extends React.Component {
       <ReactSortable
         className="answerList"
         group="tiles"
-        list={[]}
-        setList={(newState) => {}}
+        list={this.state.answerList}
+        setList={(newState) => this.setState({answerList: newState})}
       >
+        {this.state.answerList.map((item) => (
+          <div className="dragTile" key={item.id}>{item.name}</div>
+        ))}
       </ReactSortable>
 
         <div className="content">
