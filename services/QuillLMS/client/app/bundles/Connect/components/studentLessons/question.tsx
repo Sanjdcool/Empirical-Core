@@ -237,12 +237,11 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
       map((n) => [n, 'comma'])
     const cues = question.cues.
       map((n) => [n, 'cue'])
-    const endingPeriod = [['.', 'period']
+    const endingPeriod = [['.', 'period']]
 
     const allTiles = stems.concat(commas,cues,endingPeriod)
-    console.log(allTiles)
+
     const tileObjects = allTiles.map((words, i) => ({id: String(i), name: words[0], style: words[1]}))
-    console.log(tileObjects)
 
     return _.shuffle(tileObjects)
   }
