@@ -43,14 +43,20 @@ body {
 .answerList {
   background-color: white;
   border-bottom: 2px solid #82ccdd;
-  height: 50px;
+  height: 100px;
+  padding: 20px;
+  margin-bottom: 50px;
   width: 100%;
+}
+.tileList {
+  display: block;
+  margin-top: 100px;
 }
 
 .dragTile {
   &.stem { background-color: #7efff5; }
   &.comma { background-color: #7bed9f; }
-  &.cue { background-color: #ff6b81; }
+  &.cue { background-color: #ffcccc; }
   &.period { background-color: #7bed9f; }
 
 }

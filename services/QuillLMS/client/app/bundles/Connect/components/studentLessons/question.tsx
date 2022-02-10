@@ -244,7 +244,7 @@ export default class PlayLessonQuestion extends React.Component<PlayLessonQuesti
     const tileObjects = allTiles.map((words, i) => ({id: String(i), name: words[0], style: words[1]}))
     console.log(tileObjects)
 
-    return tileObjects
+    return _.shuffle(tileObjects)
   }
 
   renderTiles = () => {
