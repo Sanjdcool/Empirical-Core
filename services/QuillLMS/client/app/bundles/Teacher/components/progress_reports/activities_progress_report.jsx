@@ -90,7 +90,7 @@ export default createReactClass({
         Header: 'Student',
         accessor: 'student_id',
         resizeable: false,
-        Cell: props => this.state.studentFilters.find(student => student.value == props.value).name,
+        Cell: props => this.state.studentFilters.find(student => student.value === props.value).name,
         className: this.nonPremiumBlur(),
         maxWidth: 200
       },

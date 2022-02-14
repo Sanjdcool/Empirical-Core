@@ -193,7 +193,7 @@ class TurkDiagnostic extends React.Component {
     const { match } = this.props
     const { params } = match
     const { diagnosticID, } = params;
-    if (diagnosticID == 'researchDiagnostic') {
+    if (diagnosticID === 'researchDiagnostic') {
       return '15';
     }
     return '22';

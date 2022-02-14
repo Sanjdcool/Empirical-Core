@@ -129,7 +129,7 @@ class MassEditContainer extends React.Component {
   toggleMassEditSummaryList = () => {
     let display = 'none';
     let text = 'Expand List';
-    if (this.state.massEditSummaryListButtonText == 'Expand List') {
+    if (this.state.massEditSummaryListButtonText === 'Expand List') {
       display = 'block';
       text = 'Collapse List';
     }

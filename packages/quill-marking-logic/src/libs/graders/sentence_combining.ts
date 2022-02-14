@@ -158,7 +158,7 @@ function getMisspelledWords(text: string, spellCheckedText: string) {
 
 function getSpellingFeedbackObj(spellingPass, data, misspelledWords) {
   // missing word hint should not return any highlighted words
-  if (spellingPass.author == MISSING_WORD_HINT) {
+  if (spellingPass.author === MISSING_WORD_HINT) {
     return {
       text: data.response,
       spelling_error: true

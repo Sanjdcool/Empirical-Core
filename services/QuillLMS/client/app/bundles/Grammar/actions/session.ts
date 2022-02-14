@@ -52,7 +52,7 @@ export const denormalizeSession = (session: object): object => {
   // if there's a non-string value, then this session must be denormalized already
   const unansweredCheck = (
     session.unansweredQuestions.length &&
-    typeof session.unansweredQuestions[0] == "object"
+    typeof session.unansweredQuestions[0] === "object"
   )
   // Normalized answered questions have only two keys: "question" and "attempts".
   // The presence of the standard "uid" key means that the session is denormalized

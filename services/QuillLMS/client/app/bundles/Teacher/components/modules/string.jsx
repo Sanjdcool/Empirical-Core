@@ -4,8 +4,8 @@
 export default  function () {
 
   this.sayNumberOfThings = function (number, singular, plural) {
-    var value;
-    if (number == 1) {
+    let value;
+    if (number === 1) {
       value = singular;
     } else {
       value = plural;

@@ -189,7 +189,7 @@ const ActivityForm = ({ activity, handleClickArchiveActivity, requestErrors, sub
       const { rule_id, rule_type, prompt_id  } = highlight;
       const ruleTypePart = RULE_TYPE_TO_ROUTE_PART[rule_type]
       const ruleName = RULE_TYPE_TO_NAME[rule_type]
-      const idPart = (rule_type == 'autoML') ? `${prompt_id}/${rule_id}` : rule_id
+      const idPart = (rule_type === 'autoML') ? `${prompt_id}/${rule_id}` : rule_id
       const invalidHighlightLink = (<Link to={`/activities/${id}/${ruleTypePart}/${idPart}`}>{ruleName} Rule #{rule_id}</Link>);
       return {
         id: rule_id,

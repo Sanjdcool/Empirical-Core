@@ -19,7 +19,7 @@ export default class extends React.Component {
 
    determineCheckbox = () => {
      // TODO: rewrite this method to make checked a variable, nothing else changes
-     if (this.props.student.isSelected == true) {
+     if (this.props.student.isSelected === true) {
        return ( 
          <input
            checked="checked"

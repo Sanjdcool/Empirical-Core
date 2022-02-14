@@ -68,7 +68,7 @@ export default class TeacherGeneralAccountInfo extends React.Component {
 
   handleSchoolChange = (id, schoolObj) => {
     const { school } = this.state
-    if (id != school.id) {
+    if (id !== school.id) {
       this.setState({ changedSchools: true, })
       if (id === 'not listed') {
         const notListedSchool = this.props.alternativeSchools.find(school => school.name === 'not listed')

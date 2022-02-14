@@ -88,7 +88,7 @@ export function checkTimeout() {
     SharedCacheApi.get(SHARED_CACHE_KEY).then((result) => {
       dispatch(startListeningToQuestionAndConceptMapData())
     }).catch((response) => {
-      if (response.status == 404) {
+      if (response.status === 404) {
         dispatch(updateData())
       }
     })

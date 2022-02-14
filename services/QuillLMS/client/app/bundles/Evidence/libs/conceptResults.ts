@@ -19,7 +19,7 @@ export const generateConceptResults = (currentActivity, submittedResponses) => {
   const conceptResults = []
 
   for (const [promptID, responses] of Object.entries(submittedResponses)) {
-    const prompt = Object.values(currentActivity.prompts).filter((prompt) => prompt.id == promptID)[0]
+    const prompt = Object.values(currentActivity.prompts).filter((prompt) => prompt.id === promptID)[0]
     responses.forEach((response, index) => {
       const attempt = index + 1
       conceptResults.push({
@@ -29,7 +29,7 @@ export const generateConceptResults = (currentActivity, submittedResponses) => {
           answer: response.entry,
           attemptNumber: attempt,
           correct: response.optimal ? 1 : 0,
-          directions: (attempt == 1) ? DIRECTIONS : responses[index - 1].feedback,
+          directions: (attempt === 1) ? DIRECTIONS : responses[index - 1].feedback,
           prompt: prompt.text,
           questionNumber: conjunctionToQuestionNumber[prompt.conjunction],
           questionScore: ATTEMPTS_TO_SCORE[responses.length],

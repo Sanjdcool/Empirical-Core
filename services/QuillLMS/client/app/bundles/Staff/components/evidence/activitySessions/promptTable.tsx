@@ -60,7 +60,7 @@ const PromptTable = ({ activity, rules, prompt, showHeader, sessionId }: PromptT
   function getRuleName(ruleUID: string) {
     if (!rules) return null;
 
-    const rule = rules.find((rule) => { return rule.uid == ruleUID });
+    const rule = rules.find((rule) => { return rule.uid === ruleUID });
     return rule ? rule.name: ''
   }
 

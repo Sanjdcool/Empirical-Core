@@ -132,7 +132,7 @@ export class PromptStep extends React.Component<PromptStepProps, PromptStepState
 
     let wordsToFormat = lastSubmittedResponse.highlight.filter(hl => hl.type === RESPONSE).map(hl => this.stripHtml(hl.text))
     wordsToFormat = wordsToFormat.length === 1 ? wordsToFormat[0] : wordsToFormat
-    if (lastSubmittedResponse.feedback_type == 'plagiarism') {
+    if (lastSubmittedResponse.feedback_type === 'plagiarism') {
       return this.formatPlagiarismHighlight(str, wordsToFormat)
     } else {
       return highlightSpellingGrammar(str, wordsToFormat)
@@ -232,14 +232,14 @@ export class PromptStep extends React.Component<PromptStepProps, PromptStepState
     // following code ensures tabbing into editor always puts cursor at the end of the text
     const el = this.editor
     // retrieved from https://stackoverflow.com/a/4238971
-    if (typeof window.getSelection != "undefined" && typeof document.createRange != "undefined") {
+    if (typeof window.getSelection !== "undefined" && typeof document.createRange !== "undefined") {
       const range = document.createRange();
       range.selectNodeContents(el);
       range.collapse(false);
       const sel = window.getSelection();
       sel.removeAllRanges();
       sel.addRange(range);
-    } else if (typeof document.body.createTextRange != "undefined") {
+    } else if (typeof document.body.createTextRange !== "undefined") {
       const textRange = document.body.createTextRange();
       textRange.moveToElementText(el);
       textRange.collapse(false);

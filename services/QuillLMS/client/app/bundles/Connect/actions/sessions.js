@@ -117,7 +117,7 @@ function normalizeQuestion(question) {
 }
 
 function handleSessionSnapshot(session, callback) {
-  if (session != null) {
+  if (session !== null) {
     if (session.currentQuestion) {
       if (session.currentQuestion.question) {
         session.currentQuestion.question.attempts = session.currentQuestion.question.attempts || [];

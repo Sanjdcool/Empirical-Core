@@ -3,27 +3,27 @@ import _ from 'underscore'
 
 export default function (modelOptions, setStateByKey, server) {
 
-  var optionTypesObjArr;
+  let optionTypesObjArr;
 
-  var results = {};
+  let results = {};
 
-  var updateState = function () {
-    var total = {...initialOptions, ...results}
+  let updateState = function () {
+    let total = {...initialOptions, ...results}
     setStateByKey('options', total);
   }
 
-  var updater = function (optionType) {
+  let updater = function (optionType) {
     return function (data) {
       results[optionType] = data[optionType];
-      if (Object.keys(results).length == optionTypesObjArr.length) {
+      if (Object.keys(results).length === optionTypesObjArr.length) {
         updateState();
       }
     }
   }
 
-  var retrieve = function (optionTypeObj) {
-    var optionType = optionTypeObj.name;
-    var url = (optionTypeObj.cmsController ? ['/cms/', optionType].join('') : null)
+  let retrieve = function (optionTypeObj) {
+    let optionType = optionTypeObj.name;
+    let url = (optionTypeObj.cmsController ? ['/cms/', optionType].join('') : null)
     server.getStateFromServer(optionType, url, updater);
   }
 
@@ -32,8 +32,8 @@ export default function (modelOptions, setStateByKey, server) {
     _.each(optionTypesObjArr, retrieve)
   }
 
-  var initialOptions;
-  var initialOptionsMaker = function () {
+  let initialOptions;
+  let initialOptionsMaker = function () {
     initialOptions = _.reduce(modelOptions, function (hash, ele) {
       hash[ele.name] = ele.value;
       return hash

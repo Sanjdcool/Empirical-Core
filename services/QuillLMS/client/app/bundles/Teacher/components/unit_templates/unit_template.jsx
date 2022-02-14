@@ -110,7 +110,7 @@ export default createReactClass({
   save() {
     const model = this.state.model;
 
-    if (this.state.options.authors.length == 1) {
+    if (this.state.options.authors.length === 1) {
       model.author_id = this.state.options.authors[0].id;
     }
     const fieldsToNormalize = [

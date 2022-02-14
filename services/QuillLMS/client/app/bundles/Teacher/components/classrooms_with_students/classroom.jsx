@@ -25,7 +25,7 @@ export default class Classroom extends React.Component {
    let allStudentsSelected;
    if (students.length > 0) {
      const selected = _.where(students, {isSelected: true});
-     allStudentsSelected = (selected.length == students.length);
+     allStudentsSelected = (selected.length === students.length);
    } else {
      allStudentsSelected = allSelected;
    }

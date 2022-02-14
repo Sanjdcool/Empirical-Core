@@ -82,7 +82,7 @@ class TitleCardForm extends React.Component<TitleCardFormProps, TitleCardFormSta
     const { match } = this.props
     const { params } = match
     const { titleCardID } = params
-    const translationMappingMissing = commonText[title] == undefined
+    const translationMappingMissing = commonText[title] === undefined
     if (titleCardID && titleChanged && translationMappingMissing) {
       return confirm(`Making this change will break the translation mapping because "${title}" does not yet exist on the mappings. Make a request on the support board to change the translation mapping before making this change. Are you sure you want to proceed?`)
     }

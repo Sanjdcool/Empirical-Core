@@ -6,9 +6,9 @@ const initialState = {
 };
 
 function question(state = initialState, action) {
+  let changes = {}
   switch (action.type) {
     case SubmitActions.NEXT_TURK_QUESTION:
-      var changes = {};
       if (state.currentQuestion) {
         changes.answeredQuestions = state.answeredQuestions.concat([state.currentQuestion]);
       }
@@ -21,7 +21,6 @@ function question(state = initialState, action) {
       }
       return Object.assign({}, state, changes);
     case SubmitActions.NEXT_TURK_QUESTION_WITHOUT_SAVING:
-      var changes = {};
       changes.currentQuestion = state.unansweredQuestions[0];
       if (changes.currentQuestion) {
         changes.currentQuestion.data.attempts = [];
@@ -31,7 +30,7 @@ function question(state = initialState, action) {
       }
       return Object.assign({}, state, changes);
     case SubmitActions.LOAD_TURK_DATA:
-      var changes2 = {
+      let changes2 = {
         unansweredQuestions: action.data,
         questionSet: action.data, };
       return Object.assign({}, state, changes2);
@@ -45,7 +44,7 @@ function question(state = initialState, action) {
       });
     case SubmitActions.SUBMIT_TURK_RESPONSE:
       if (state.currentQuestion && state.currentQuestion.data) {
-        var changes = { currentQuestion: Object.assign({}, state.currentQuestion, {
+        changes = { currentQuestion: Object.assign({}, state.currentQuestion, {
           data: Object.assign({},
             state.currentQuestion.data,
             {
@@ -56,20 +55,20 @@ function question(state = initialState, action) {
         return Object.assign({}, state, changes);
       }
     case SubmitActions.START_TURK_QUESTION:
-      var changes = { currentQuestion:
+      changes = { currentQuestion:
       Object.assign({}, state.currentQuestion, {
         started: true,
       }), };
       return Object.assign({}, state, changes);
     case SubmitActions.UPDATE_TURK_NAME:
-      var changes = { name: action.data, };
+      changes = { name: action.data, };
       return Object.assign({}, state, changes);
     case SubmitActions.LOAD_TURK_LANGUAGE:
-      var changes = { language: action.data, };
+      changes = { language: action.data, };
       return Object.assign({}, state, changes);
     case SubmitActions.UPDATE_TURK_CURRENT_QUESTION:
-      var change = action.data;
-      var changes = { currentQuestion: Object.assign({}, state.currentQuestion, {
+      let change = action.data;
+      changes = { currentQuestion: Object.assign({}, state.currentQuestion, {
         data: Object.assign({},
           state.currentQuestion.data,
           change

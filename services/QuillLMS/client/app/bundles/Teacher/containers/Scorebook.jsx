@@ -174,13 +174,13 @@ export default createReactClass({
   },
 
   checkMissing(scores) {
-    if (!(this.state.anyScoresHaveLoadedPreviously == 'true') && scores.size > 0) {
+    if (!(this.state.anyScoresHaveLoadedPreviously === 'true') && scores.size > 0) {
       this.setState({ anyScoresHaveLoadedPreviously: true ,});
       localStorage.setItem('anyScoresHaveLoadedPreviously', true);
     }
     if (!this.state.classroomFilters || this.state.classroomFilters.length === 0) {
       return 'classrooms';
-    } else if (this.state.anyScoresHaveLoadedPreviously == 'true' && (!scores || scores.size === 0)) {
+    } else if (this.state.anyScoresHaveLoadedPreviously === 'true' && (!scores || scores.size === 0)) {
       return 'activitiesWithinDateRange';
     } else if (this.state.unitFilters.length && (!scores || scores.size === 0)) {
       return 'students';
@@ -274,7 +274,7 @@ export default createReactClass({
     if (this.state.loading) {
       content = <div>{scores}<LoadingIndicator /></div>;
     } else if (this.state.missing) {
-      const onButtonClick = this.state.missing == 'activitiesWithinDateRange' ? () => { this.selectDates(null, null); } : null;
+      const onButtonClick = this.state.missing === 'activitiesWithinDateRange' ? () => { this.selectDates(null, null); } : null;
       content = <EmptyProgressReport missing={this.state.missing} onButtonClick={onButtonClick} />;
     } else {
       content = <div>{scores}</div>;

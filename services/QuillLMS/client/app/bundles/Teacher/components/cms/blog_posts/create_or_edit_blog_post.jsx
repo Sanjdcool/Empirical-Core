@@ -384,8 +384,8 @@ export default class CreateOrEditBlogPost extends React.Component {
     const container = document.getElementById('markdown-content');
     let newValue = body;
     if (container.selectionStart || container.selectionStart === 0) {
-      var startPos = container.selectionStart;
-      var endPos = container.selectionEnd;
+      let startPos = container.selectionStart;
+      let endPos = container.selectionEnd;
       newValue = container.value.substring(0, startPos);
       newValue += startChar;
       newValue += container.value.substring(startPos, endPos);
@@ -431,7 +431,7 @@ export default class CreateOrEditBlogPost extends React.Component {
       blogPostPreviewDescription,
       author_id,
     } = this.state
-    const author = authors.find(a => a.id == author_id)
+    const author = authors.find(a => a.id === author_id)
     let footerContent, button
     if (author) {
       footerContent = `<p class='author'>by ${author.name}</p>`
@@ -460,7 +460,7 @@ export default class CreateOrEditBlogPost extends React.Component {
   updatePreviewCardTweetContent = () => {
     const { authors, } = this.props
     const { publishedAt, tweetImage, tweetText, tweetAuthor, author_id, } = this.state
-    const author = authors.find(a => a.id == author_id)
+    const author = authors.find(a => a.id === author_id)
     let footerContent
     if (author) {
       footerContent = `<p class='author'>by ${author.name}</p>`
@@ -485,7 +485,7 @@ export default class CreateOrEditBlogPost extends React.Component {
     const { authors, } = this.props
     const matchedQueryParameter = videoLink.match(/\?v=(.*)(\&)/) || videoLink.match(/\?v=(.*)$/)
     const embedUrl = `https://www.youtube-nocookie.com/embed/${matchedQueryParameter[1]}?rel=0&amp;controls=0&amp;showinfo=0&player=html5`
-    const author = authors.find(a => a.id == author_id)
+    const author = authors.find(a => a.id === author_id)
     let footerContent
     if (author) {
       footerContent = `<p class='author'>by ${author.name}</p>`
@@ -528,7 +528,7 @@ export default class CreateOrEditBlogPost extends React.Component {
       content = (<div id="article-container">
         <article>
           <BlogPostContent
-            author={authors.find(a => a.id == author_id)}
+            author={authors.find(a => a.id === author_id)}
             body={body}
             centerImages={centerImages}
             displayPaywall={false}

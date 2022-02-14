@@ -5,7 +5,7 @@ import $ from 'jquery';
 export default class SelectRole extends React.Component {
 
   updateRole = () => {
-    var x = $(this.refs.select).val();
+    let x = $(this.refs.select).val();
     this.props.updateRole(x);
   };
 

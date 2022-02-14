@@ -25,10 +25,12 @@
     ]
   },
   "rules": {
+    "eqeqeq": "error",
     "no-console": "error",
     "for-direction": "error",
     "no-cond-assign": "error",
     "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
+    "no-var": "error",
     "indent": ["error", 2, { "SwitchCase": 1 }],
 
     "jsx-a11y/anchor-has-content": "error",

@@ -84,7 +84,7 @@ class ConceptsIndex extends React.Component<any, ConceptsIndexState> {
 
   filterConcepts(concepts:Array<Concept>, searchValue: string):Array<Concept>{
     const { fuse, } = this.state
-    if (searchValue == '') {return concepts};
+    if (searchValue === '') {return concepts};
     if (fuse) {
       return fuse.search(searchValue)
     } else {

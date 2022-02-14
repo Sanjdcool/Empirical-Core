@@ -151,7 +151,7 @@ describe.skip('ManageUnits component', () => {
       wrapper.setState({ selectedClassroomId: 42 });
       wrapper.instance().getUnitsForCurrentClass();
       expect(wrapper.state().units).toEqual(
-        mockUnits.filter(u => u.classroom_id == Number(wrapper.state().selectedClassroomId))
+        mockUnits.filter(u => u.classroom_id === Number(wrapper.state().selectedClassroomId))
       );
     });
 

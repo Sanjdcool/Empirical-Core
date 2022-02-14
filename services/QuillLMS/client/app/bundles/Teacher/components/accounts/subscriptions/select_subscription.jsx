@@ -18,7 +18,7 @@ export default class SelectSubscription extends React.Component {
   };
 
   getErrors = (type) => {
-    if (this.props.subscription.errors != null) {
+    if (this.props.subscription.errors !== null) {
       return this.props.subscription.errors[type];
     }
     return null;

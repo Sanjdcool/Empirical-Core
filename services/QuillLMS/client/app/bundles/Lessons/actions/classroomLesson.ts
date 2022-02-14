@@ -101,7 +101,7 @@ export function addSlide(editionId: string, editionQuestions: CustomizeIntF.Edit
 
 export function deleteEditionSlide(editionId, slideId, slides) {
   const newSlides = _.compact(Object.keys(slides).map(slideKey => {
-    if (slideKey != slideId ) {
+    if (slideKey !== slideId ) {
       return slides[slideKey]
     }
   }))
@@ -123,7 +123,7 @@ export function addScriptItem(editionId: string, slideId: string, slide: IntF.Qu
 
 export function deleteScriptItem(editionId, slideId, scriptItemId, script) {
   const newScript = _.compact(Object.keys(script).map(scriptKey => {
-    if (scriptKey != scriptItemId ) {
+    if (scriptKey !== scriptItemId ) {
       return script[scriptKey]
     }
   }))

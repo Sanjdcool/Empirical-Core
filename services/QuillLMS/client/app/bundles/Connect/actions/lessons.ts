@@ -39,7 +39,7 @@ const loadLessonWithQuestions = (uid) => {
       const fetchedLesson = getState().lessons.data[uid];
       const questionTypes = ['questions', 'fillInBlank', 'titleCards', 'sentenceFragments'];
       questionTypes.forEach((questionType) => {
-        const questionUids = fetchedLesson.questions.filter((q) => q.questionType == questionType).map((q) => q.key);
+        const questionUids = fetchedLesson.questions.filter((q) => q.questionType === questionType).map((q) => q.key);
         switch (questionType) {
           case 'questions':
             dispatch(questionActions.loadSpecifiedQuestions(questionUids));
@@ -83,7 +83,7 @@ const submitLessonEdit = (cid, content, qids) => {
   return (dispatch, getState) => {
     dispatch({ type: C.SUBMIT_LESSON_EDIT, cid, });
     const cleanedContent = pickBy(content)
-    if (cleanedContent.questionType != C.INTERNAL_TITLE_CARDS_TYPE) {
+    if (cleanedContent.questionType !== C.INTERNAL_TITLE_CARDS_TYPE) {
       dispatch(updateQuestions(cleanedContent, qids))
     }
     LessonApi.update(TYPE_CONNECT_LESSON, cid, cleanedContent).then((lesson) => {
@@ -125,7 +125,7 @@ const submitNewLesson = (content) => {
       dispatch(loadLesson(lessonUid))
       dispatch({ type: C.RECEIVE_NEW_LESSON_RESPONSE, });
       const qids = cleanedContent.questions ? cleanedContent.questions.map(q => q.key) : []
-      if (cleanedContent.questionType != C.INTERNAL_TITLE_CARDS_TYPE) {
+      if (cleanedContent.questionType !== C.INTERNAL_TITLE_CARDS_TYPE) {
         dispatch(updateQuestions(cleanedContent, qids))
       }
       dispatch({ type: C.DISPLAY_MESSAGE, message: 'Submission successfully saved!', });

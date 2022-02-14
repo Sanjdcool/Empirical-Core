@@ -45,7 +45,7 @@ export default {
 };
 
 function processSession(session) {
-  if (session != null) {
+  if (session !== null) {
     if (session.currentQuestion) {
       if (session.currentQuestion.question) {
         session.currentQuestion.question.attempts = [];
@@ -61,7 +61,7 @@ function processSession(session) {
 function denormalizeSession(session) {
   // If the session is already in a denormalized form (it has question keys that
   // contain objects instead of just an ID string, just return the session as-is
-  if (typeof session.questionSet[0].data == "object") return session
+  if (typeof session.questionSet[0].data === "object") return session
   // If someone has answered no questions, this key will be missing
   if (session.answeredQuestions) {
     session.answeredQuestions.forEach((value, index, answeredQuestions) => {

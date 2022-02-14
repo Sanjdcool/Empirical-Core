@@ -144,7 +144,7 @@ class Lesson extends React.Component {
         const questionTypeLink = questionType === 'fillInBlank' ? 'fill-in-the-blanks' : questionType.toKebab()
         const flagTag = permittedFlag(lessonFlag, flag) ? '' : <strong>{flag.toUpperCase()} - </strong>
         const className = (key === params.questionID || key === params.titleCardID) ? "selected" : ""
-        const cuesList = (cues && cues[0] != "") ? cues.map((cue, index) => {
+        const cuesList = (cues && cues[0] !== "") ? cues.map((cue, index) => {
           return <span className="tag" key={index}>{cue}</span>
         }) : null
         const questionURL = lessonQuestionType === 'title-cards' ? `/admin/lesson-view/${params.lessonID}/${lessonQuestionType}/${key}/` :

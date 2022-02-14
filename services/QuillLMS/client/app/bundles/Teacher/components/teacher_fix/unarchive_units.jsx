@@ -40,7 +40,7 @@ export default class UnarchiveUnits extends React.Component {
 
   toggleSelected = e => {
     const newSelectedUnitIds = this.state.selectedUnitIds
-    const selectedIndex = newSelectedUnitIds.findIndex(unitId => unitId == e.target.id)
+    const selectedIndex = newSelectedUnitIds.findIndex(unitId => unitId === e.target.id)
     if (selectedIndex === -1) {
       newSelectedUnitIds.push(e.target.id)
     } else {
@@ -92,7 +92,7 @@ export default class UnarchiveUnits extends React.Component {
   renderUnitsForm() {
     if (this.state.archivedUnits.length > 0) {
       const unitsList = this.state.archivedUnits.map(u => {
-        const checked = this.state.selectedUnitIds.find(unitId => unitId == u.id)
+        const checked = this.state.selectedUnitIds.find(unitId => unitId === u.id)
         const nameFieldStyle = u.shared_name ? {'border': 'red 1px solid', 'width': '447px'} : {'width': '447px'}
         return (
           <div key={`${u.id}-${checked}`}>

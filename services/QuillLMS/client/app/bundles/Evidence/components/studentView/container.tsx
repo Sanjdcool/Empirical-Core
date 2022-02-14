@@ -161,7 +161,7 @@ export const StudentViewContainer = ({ dispatch, session, isTurk, location, acti
 
     if (nextStep) {
       // don't activate a step if it's already active
-      if (activeStep == nextStep) return
+      if (activeStep === nextStep) return
       // // don't activate nextSteps before Done reading button has been clicked
       if (nextStep && nextStep > 1 && !completedSteps.includes(READ_PASSAGE_STEP)) return
 

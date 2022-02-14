@@ -1,5 +1,5 @@
 export default (grade) => {
-  if (grade == null) {
+  if (grade === null) {
     return 'gray';
   } else if (grade < 0.6) {
     return 'red';

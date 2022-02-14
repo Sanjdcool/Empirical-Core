@@ -73,7 +73,7 @@ function _getCaseSensitiveWord(word: string, optimalSentences: Array<string>):st
   const normalizedStringPlusLower = normalizeString(optimalSentence);
   const startIndex = normalizedStringPlusLower.indexOf(word);
   const normalizedWord = normalizedString.substring(startIndex, word.length + startIndex);
-  if (normalizedWord != word) {
+  if (normalizedWord !== word) {
     return lowercaseNormalizedWordIfPossible(normalizedWord, word, optimalSentences)
   }
   return normalizedWord
@@ -81,7 +81,7 @@ function _getCaseSensitiveWord(word: string, optimalSentences: Array<string>):st
 
 function lowercaseNormalizedWordIfPossible(normalizedWord: string, originalWord:string, optimalSentences: Array<string>):string {
   const optimalWords = _.map(optimalSentences, sentence => normalizeStringWithoutLowercasing(sentence).split(' '));
-  if ([].concat.apply([], optimalWords).indexOf(originalWord) != -1) {
+  if ([].concat.apply([], optimalWords).indexOf(originalWord) !== -1) {
     return originalWord
   }
   return normalizedWord

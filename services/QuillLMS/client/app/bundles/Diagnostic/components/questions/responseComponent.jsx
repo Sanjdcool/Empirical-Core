@@ -199,7 +199,7 @@ class ResponseComponent extends React.Component {
   formatForQuestionBar = () => {
     // {"human_optimal":153,"human_suboptimal":140,"algo_optimal":0,"algo_suboptimal":8780,"unmatched":28820}
     const totalResponseCount = this.state.health.total_number_of_attempts;
-    if (totalResponseCount == 0) {
+    if (totalResponseCount === 0) {
       return [{
         value: 100,
         color: '#eeeeee',
@@ -471,7 +471,7 @@ class ResponseComponent extends React.Component {
   }
 
   getFilteredResponses = responses => {
-    if (this.props.filters.stringFilter == '') {
+    if (this.props.filters.stringFilter === '') {
       return responses;
     }
     const that = this;

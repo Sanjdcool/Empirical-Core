@@ -50,7 +50,7 @@ class FillInBlankForm extends Component {
 
   handleInstructionsChange = e => {
     this.setState({instructions: e.target.value});
-    if (e.target.value == '/') {
+    if (e.target.value === '/') {
       this.setState({ showDefaultInstructions: true})
     } else {
       this.setState({ showDefaultInstructions: false})
@@ -107,7 +107,7 @@ class FillInBlankForm extends Component {
       cuesLabel: cuesLabel
     };
     data.prompt = data.prompt.replace('<p>', '').replace('</p>', '')
-    if (this.props.new && data.prompt != '') {
+    if (this.props.new && data.prompt !== '') {
       action(
         data,
         {

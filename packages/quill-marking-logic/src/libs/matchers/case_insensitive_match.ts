@@ -19,7 +19,7 @@ export function caseInsensitiveChecker(responseString: string, responses:Array<R
   if (match) {
     const parentID = match.id
     // if the response is otherwise optimal and NOT a diagnostic fill in the blank response, we want to override caseInsensitive and call out casing errors
-    if (match.optimal && responseString != match.text && !isDiagnosticFIB) {
+    if (match.optimal && responseString !== match.text && !isDiagnosticFIB) {
       lenientCasing = false
     }
     const conceptResults = passConceptResults ? match.concept_results : null

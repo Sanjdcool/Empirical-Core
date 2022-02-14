@@ -216,12 +216,12 @@ class CustomizeEdition extends React.Component<any, any> {
           question.prompt &&
           question.prompt.trim() === '' ||
           question.prompt === '<p></p>' ||
-          question.prompt == '<p><br></p>'
+          question.prompt === '<p><br></p>'
       ) || (
         !question.prompt &&
           question.html &&
           question.html === '<p></p>' ||
-          question.html == '<p><br></p>'
+          question.html === '<p><br></p>'
       );
 
       if (isIncomplete) {

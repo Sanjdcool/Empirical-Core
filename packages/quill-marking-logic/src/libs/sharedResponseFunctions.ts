@@ -6,7 +6,7 @@ export function getOptimalResponses(responses: Array<Response>): Array<Response>
 }
 
 export function getSubOptimalResponses(responses: Array<Response>): Array<Response> {
-  return _.filter(responses, resp => resp.parent_id == undefined && resp.feedback !== undefined && resp.optimal == false);
+  return _.filter(responses, resp => resp.parent_id === undefined && resp.feedback !== undefined && resp.optimal === false);
 }
 
 export function getTopOptimalResponse(responses: Array<Response>): Response {

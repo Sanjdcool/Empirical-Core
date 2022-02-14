@@ -3,7 +3,7 @@ import StudentProfileTooltipTitleGenerator from './student_profile_tooltip_title
 import ScorebookTooltipTitleGenerator from './scorebook_tooltip_title_generator.jsx';
 
 export default function (context) {
-  if (context == undefined) {
+  if (context === undefined) {
     throw 'Error: required parameter in TooltipTitleGeneratorGenerator is undefined';
   }
 
@@ -15,9 +15,9 @@ export default function (context) {
     let result,
       finalResult;
 
-    if (context == 'studentProfile') {
+    if (context === 'studentProfile') {
       result = _studentProfileTooltipTitleGenerator;
-    } else if (context == 'scorebook') {
+    } else if (context === 'scorebook') {
       result = _scorebookTooltipTitleGenerator;
     }
     finalResult = new result(_percentageDisplayer);

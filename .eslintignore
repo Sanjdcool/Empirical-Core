@@ -9,6 +9,7 @@ services/QuillLMS/coverage/**
 services/QuillLMS/client/server-rails-hot.js
 services/QuillLMS/client/webpack.client.rails.hot.config.js
 services/QuillLMS/public/**
+services/QuillLMS/engines/**
 services/QuillLMS/public/webpack/**
 services/QuillLMS/vendor/assets/javascripts/bootstrap.js
 services/QuillLMS/vendor/assets/javascripts/jquery-1.8.2.js

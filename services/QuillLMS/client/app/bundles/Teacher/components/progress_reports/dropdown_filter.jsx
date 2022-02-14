@@ -21,7 +21,7 @@ export default class DropdownFilter extends React.Component {
   };
 
   getButtonClassName = () => {
-    // if (this.props.selectedOption && this.props.selectedOption.value == '') {
+    // if (this.props.selectedOption && this.props.selectedOption.value === '') {
     //   return 'select-gray';
     // }
     return 'select-white';

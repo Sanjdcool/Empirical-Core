@@ -48,7 +48,7 @@ class sentenceFragmentForm extends React.Component {
         break;
       case 'instructions':
         this.setState({ instructions: e.target.value, });
-        if (e.target.value == '/') {
+        if (e.target.value === '/') {
           this.setState({ showDefaultInstructions: true})
         } else {
           this.setState({ showDefaultInstructions: false})

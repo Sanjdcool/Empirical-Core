@@ -30,9 +30,9 @@ class CustomizeNavbar extends React.Component<any, any> {
     const incompleteQuestions:Array<number>|never = []
     slides.forEach((s, i) => {
       const q = s.data.play
-      if (q.prompt === '' || q.prompt && q.prompt.trim() === '' || q.prompt === '<p></p>' || q.prompt == '<p><br></p>') {
+      if (q.prompt === '' || q.prompt && q.prompt.trim() === '' || q.prompt === '<p></p>' || q.prompt === '<p><br></p>') {
         incompleteQuestions.push(i)
-      } else if (!q.prompt && q.html && q.html === '<p></p>' || q.html == '<p><br></p>') {
+      } else if (!q.prompt && q.html && q.html === '<p></p>' || q.html === '<p><br></p>') {
         incompleteQuestions.push(i)
       }
     })

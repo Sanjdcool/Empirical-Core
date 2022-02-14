@@ -29,13 +29,13 @@ class BlockButton extends React.Component {
         .getCurrentContent()
         .getBlockForKey(selection.getStartKey())
         .getType();
-      isActive = currentType == blockType;
+      isActive = currentType === blockType;
     } else {
       // editor not yet available / initialized
       isActive = false;
     }
 
-    if (children && typeof children == 'object') {
+    if (children && typeof children === 'object') {
       const ChildInput = React.cloneElement(children, {
         toggleBlockType,
         isActive,

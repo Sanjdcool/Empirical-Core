@@ -121,7 +121,7 @@ class PlayClassroomLessonContainer extends React.Component<any, any> {
     const { timeTracking, } = this.state
     const { classroomLesson, classroomSessions, } = this.props
     const { hasreceiveddata } = classroomLesson
-    if (classroomLesson.hasreceiveddata != prevProps.hasreceiveddata && hasreceiveddata) {
+    if (classroomLesson.hasreceiveddata !== prevProps.hasreceiveddata && hasreceiveddata) {
       document.title = `Quill.org | ${classroomLesson.data.title}`
     }
 

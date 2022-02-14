@@ -54,7 +54,7 @@ export default createReactClass({
   },
 
   componentDidMount: function() {
-    var sortDefinitions = this.props.sortDefinitions();
+    let sortDefinitions = this.props.sortDefinitions();
     this.defineSorting(sortDefinitions.config, sortDefinitions.default);
     // Pass true to fetchData on mount becuase we only want to use the query params on the first load.
     this.fetchData(true);
@@ -81,7 +81,7 @@ export default createReactClass({
 
   // Get results with all filters, sorting
   getFilteredResults: function() {
-    var allResults = this.state.results;
+    let allResults = this.state.results;
     return this.applySorting(allResults);
   },
 
@@ -91,7 +91,7 @@ export default createReactClass({
   },
 
   goToPage: function(page) {
-    var newState = {
+    let newState = {
       currentPage: page
     };
     this.setState(newState, this.fetchData);
@@ -130,7 +130,7 @@ export default createReactClass({
   },
 
   requestParams: function() {
-    var requestParams = _.extend(this.state.currentFilters, {});
+    let requestParams = _.extend(this.state.currentFilters, {});
     if (this.props.pagination) {
       requestParams = _.extend(requestParams, {page: this.state.currentPage});
     }
@@ -158,9 +158,9 @@ export default createReactClass({
         const classroomId = getParameterByName('classroom_id') || '';
         const studentId = getParameterByName('student_id') || '';
         const unitId = getParameterByName('unit_id') || '';
-        const selectedClassroom = this.state.classroomFilters.filter(classroom => { return classroom.value == classroomId })[0];
-        const selectedStudent = this.state.studentFilters.filter(student => { return student.value == studentId })[0];
-        const selectedUnit = this.state.unitFilters.filter(unit => { return unit.value == unitId })[0];
+        const selectedClassroom = this.state.classroomFilters.filter(classroom => { return classroom.value === classroomId })[0];
+        const selectedStudent = this.state.studentFilters.filter(student => { return student.value === studentId })[0];
+        const selectedUnit = this.state.unitFilters.filter(unit => { return unit.value === unitId })[0];
         this.setState({
           selectedClassroom: selectedClassroom,
           selectedStudent: selectedStudent,
@@ -183,7 +183,7 @@ export default createReactClass({
   // Depending upon whether or not pagination is implemented,
   // sort results client-side or fetch sorted data from server.
   handleSort: function() {
-    var cb;
+    let cb;
     if (this.props.pagination) {
       cb = this.fetchData;
     } else {
@@ -200,22 +200,22 @@ export default createReactClass({
 
   studentPageBlur: function() {
     const lastEightCharOfURL = window.location.href.substr(window.location.href.length - 8)
-    const onStudentPage = lastEightCharOfURL == 'concepts'
+    const onStudentPage = lastEightCharOfURL === 'concepts'
     if (this.state.disabled && onStudentPage) {
       return 'non-premium-student'
     }
   },
 
   render: function() {
-    var pagination,
+    let pagination,
       csvExport,
       mainSection,
       faqLink;
-    var filteredResults = this.getFilteredResults();
+    let filteredResults = this.getFilteredResults();
     if (this.props.pagination) {
       pagination = <Pagination currentPage={this.state.currentPage} maxPageNumber={this.props.maxPageNumber} numberOfPages={this.state.numPages} selectPageNumber={this.goToPage} />;
     }
-    var visibleResults = this.getVisibleResults(filteredResults);
+    let visibleResults = this.getVisibleResults(filteredResults);
 
     if (this.props.exportCsv) {
       csvExport = <ExportCsv disabled={!!this.state.disabled} exportType={this.props.exportCsv} filters={this.state.currentFilters} reportUrl={this.props.sourceUrl} teacher={this.state.teacher} />;

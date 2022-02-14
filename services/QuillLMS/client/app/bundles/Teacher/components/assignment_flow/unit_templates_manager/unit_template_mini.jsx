@@ -21,7 +21,7 @@ export default class UnitTemplateMini extends React.Component {
   getLink() {
     const { data, } = this.props
     let link
-    if (data.id == 'createYourOwn') {
+    if (data.id === 'createYourOwn') {
       if (this.isSignedIn()) {
         link = '/assign/activity-library'
       } else {
@@ -47,7 +47,7 @@ export default class UnitTemplateMini extends React.Component {
 
   miniSpecificComponents() {
     const { data, } = this.props
-    if (data.id == 'createYourOwn') {
+    if (data.id === 'createYourOwn') {
       return (
         <a href={this.getLink()}>
           <div className='text-center create-your-own'>

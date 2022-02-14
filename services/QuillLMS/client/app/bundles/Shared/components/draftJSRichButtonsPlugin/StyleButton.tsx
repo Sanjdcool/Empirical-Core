@@ -39,7 +39,7 @@ class StyleButton extends React.Component {
       isActive = false;
     }
 
-    if (children && typeof children == 'object') {
+    if (children && typeof children === 'object') {
       const ChildInput = React.cloneElement(children, {
         toggleInlineStyle: wrapPrevent(toggleInlineStyle),
         isActive,

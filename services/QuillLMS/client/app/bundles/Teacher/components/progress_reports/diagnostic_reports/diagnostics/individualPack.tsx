@@ -124,7 +124,7 @@ const IndividualPack = ({ classrooms, history, match, location, lessonsBannerIsS
 
   function diagnosticForClassroom(classroom) {
     return classroom.diagnostics.find(d => {
-      const assignedDiagnosticAsEitherPreOrPost = (d.pre.activity_id === activityId) || (d.post && d.post.activity_id == activityId)
+      const assignedDiagnosticAsEitherPreOrPost = (d.pre.activity_id === activityId) || (d.post && d.post.activity_id === activityId)
       const preOrPostHasUnitId = d.pre.unit_id || d.post.unit_id
       if (assignedDiagnosticAsEitherPreOrPost && unitId && preOrPostHasUnitId) {
         return d.pre.unit_id === Number(unitId) || d.post && d.post.unit_id === Number(unitId)

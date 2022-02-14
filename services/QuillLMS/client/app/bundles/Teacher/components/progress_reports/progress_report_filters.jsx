@@ -5,7 +5,7 @@ import _ from 'underscore'
 export default class ProgressReportFilters extends React.Component {
   activeFilter = (selected, options) => {
     if(!selected || !options) { return ''; }
-    if(selected.value != options[0].value) {
+    if(selected.value !== options[0].value) {
       return 'actively-selected';
     } else {
       return '';
@@ -37,7 +37,7 @@ export default class ProgressReportFilters extends React.Component {
   };
 
   render() {
-    var filters = [];
+    let filters = [];
     if (_.include(this.props.filterTypes, 'classroom')) {
       filters.push(this.classroomFilter());
     }

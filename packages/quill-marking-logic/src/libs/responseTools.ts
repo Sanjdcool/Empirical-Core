@@ -32,7 +32,7 @@ export function sortByLevenshteinAndOptimal(userString:string, responses:Array<R
   return responses.sort((a, b) => {
     const aLevenshtein = Number(a.levenshtein)
     const bLevenshtein = Number(b.levenshtein)
-    if ((aLevenshtein - bLevenshtein) != 0) {
+    if ((aLevenshtein - bLevenshtein) !== 0) {
       return aLevenshtein - bLevenshtein;
     }
     // sorts by boolean

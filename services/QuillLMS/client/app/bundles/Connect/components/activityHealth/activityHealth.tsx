@@ -40,7 +40,7 @@ interface ActivityHealthState {
 function addCommasToThousands(num)
 {
   if (!num) return ""
-  var num_parts = num.toString().split(".");
+  let num_parts = num.toString().split(".");
   num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return num_parts.join(".");
 }
@@ -132,7 +132,7 @@ class ActivityHealth extends React.Component<ActivityHealthProps, ActivityHealth
               row.original['diagnostics'] ?
                 row.original['diagnostics'].map((diagnostic, index) => {
                   if (!diagnostic) return "";
-                  else if (index != row.original['diagnostics'].length - 1) return <div key={diagnostic}>{diagnostic},</div>
+                  else if (index !== row.original['diagnostics'].length - 1) return <div key={diagnostic}>{diagnostic},</div>
                   else return <div key={diagnostic}>{diagnostic}</div>
                 }) : ''
             }
@@ -171,7 +171,7 @@ class ActivityHealth extends React.Component<ActivityHealthProps, ActivityHealth
               row.original['activity_packs'] ?
                 row.original['activity_packs'].map((ap, index) => {
                   if (!ap.name) return "";
-                  else if (index != row.original['activity_packs'].length - 1) return <div key={ap.id}>{ap.name},</div>
+                  else if (index !== row.original['activity_packs'].length - 1) return <div key={ap.id}>{ap.name},</div>
                   return <div key={ap.id}>{ap.name}</div>
                 }) : ''
             }
@@ -281,7 +281,7 @@ class ActivityHealth extends React.Component<ActivityHealthProps, ActivityHealth
       url: ACTIVITY_HEALTHS_URL,
     }, (e, r, body) => {
       let newState = {}
-      if (e || r.statusCode != 200) {
+      if (e || r.statusCode !== 200) {
         newState = {
           loadingTableData: false,
           dataResults: [],

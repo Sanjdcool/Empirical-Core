@@ -108,7 +108,7 @@ class ResponseComponent extends React.Component {
   };
 
   getFilteredResponses = responses => {
-    if (this.props.filters.stringFilter == '') {
+    if (this.props.filters.stringFilter === '') {
       return responses;
     }
     const that = this;
@@ -236,7 +236,7 @@ class ResponseComponent extends React.Component {
 
   formatForQuestionBar = () => {
     const totalResponseCount = this.state.health.total_number_of_attempts;
-    if (totalResponseCount == 0) {
+    if (totalResponseCount === 0) {
       return [{
         value: 100,
         color: '#eeeeee',

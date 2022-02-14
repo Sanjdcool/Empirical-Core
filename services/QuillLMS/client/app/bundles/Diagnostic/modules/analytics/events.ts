@@ -5,7 +5,7 @@ import { EventDefinitions } from './event_definitions';
 // to analytics
 function validateEventsList(eventDefinitions: Array<any>): void {
   function checkForDuplicates(target: Array<any>) {
-    if (new Set(target).size != target.length) {
+    if (new Set(target).size !== target.length) {
       throw new Error('There are duplicate values in the provided array.');
     }
   }

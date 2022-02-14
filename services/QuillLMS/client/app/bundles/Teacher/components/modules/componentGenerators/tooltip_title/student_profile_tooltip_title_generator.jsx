@@ -7,7 +7,7 @@ export default function (percentageDisplayer) {
 
   this.generate = function (data) {
     let totalScoreOrNot;
-    if (data.percentage == null) {
+    if (data.percentage === null) {
       totalScoreOrNot = null;
     }
 

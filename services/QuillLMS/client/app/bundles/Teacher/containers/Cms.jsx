@@ -10,7 +10,7 @@ export default class Cms extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.initializeModules()
-    var hash1 = {
+    let hash1 = {
       crudState: 'index',
       resourceToEdit: null,
       flag: 'All'
@@ -24,7 +24,7 @@ export default class Cms extends React.Component {
   }
 
   initializeModules = () => {
-    var server = new Server(this.props.resourceNameSingular, this.props.resourceNamePlural);
+    let server = new Server(this.props.resourceNameSingular, this.props.resourceNamePlural);
     this.modules = {
       server: server
     }
@@ -32,7 +32,7 @@ export default class Cms extends React.Component {
 
   // TODO: abstract out below method
   updateState = (key, value) => {
-    var newState = this.state;
+    let newState = this.state;
     newState[key] = value;
     this.setState(newState);
   };
@@ -49,7 +49,7 @@ export default class Cms extends React.Component {
     // FIXME this fn does not have to be so complicated, need to change server module
     let that = this;
     return function (data) {
-      var newState = that.state;
+      let newState = that.state;
       newState[that.props.resourceNamePlural] = data[that.props.resourceNamePlural];
       that.setState(newState);
     }
@@ -175,13 +175,13 @@ export default class Cms extends React.Component {
   };
 
   isSortable = () => {
-    if(this.state[this.props.resourceNamePlural].length == 0 || (this.state.flag && !['All', 'Not Archived'].includes(this.state.flag))) { return false }
+    if(this.state[this.props.resourceNamePlural].length === 0 || (this.state.flag && !['All', 'Not Archived'].includes(this.state.flag))) { return false }
     const sortableResources = ['activity_classifications', 'unit_templates'];
     return sortableResources.includes(this.props.resourceNamePlural);
   };
 
   render() {
-    var result;
+    let result;
     switch (this.state.crudState) {
       case 'index':
         result = this.indexTable();

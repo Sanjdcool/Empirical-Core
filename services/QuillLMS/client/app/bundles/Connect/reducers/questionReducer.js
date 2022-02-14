@@ -7,9 +7,10 @@ const initialState = {
 }
 
 function question(state = initialState, action) {
+  let changes = {};
+
   switch (action.type) {
     case SubmitActions.NEXT_QUESTION:
-      var changes = {};
       if (state.currentQuestion) {
         changes.answeredQuestions = state.answeredQuestions.concat([state.currentQuestion])
       }
@@ -22,7 +23,7 @@ function question(state = initialState, action) {
       }
       return Object.assign({}, state, changes)
     case SubmitActions.LOAD_DATA:
-      var changes2 = {
+      let changes2 = {
         unansweredQuestions: action.data,
         questionSet: action.data};
       return Object.assign({}, state, changes2)
@@ -35,7 +36,7 @@ function question(state = initialState, action) {
         unansweredQuestions: []
       })
     case SubmitActions.SUBMIT_RESPONSE:
-      var changes = {currentQuestion:
+      changes = {currentQuestion:
         Object.assign({}, state.currentQuestion, {
           question: Object.assign({},
             state.currentQuestion.question,
@@ -46,16 +47,16 @@ function question(state = initialState, action) {
       }
       return Object.assign({}, state, changes)
     case SubmitActions.START_QUESTION:
-      var changes = {currentQuestion:
+      changes = {currentQuestion:
       Object.assign({}, state.currentQuestion, {
         started: true
       })}
       return Object.assign({}, state, changes)
     case SubmitActions.UPDATE_NAME:
-      var changes = {name: action.data}
+      changes = {name: action.data}
       return Object.assign({}, state, changes)
     case SubmitActions.UPDATE_CURRENT_QUESTION:
-      var changes = {currentQuestion:
+      changes = {currentQuestion:
       Object.assign({}, state.currentQuestion, {
         question: Object.assign({},
           state.currentQuestion.question,

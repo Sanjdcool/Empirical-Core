@@ -44,7 +44,7 @@ class ConceptsChangeLog extends React.Component<any, ConceptsChangeLogState> {
   }
 
   filterChangeLog(changeLogs:Array<ChangeLog>, searchValue:string):Array<ChangeLog>{
-    if (searchValue == '') {return changeLogs};
+    if (searchValue === '') {return changeLogs};
     if (this.state.fuse) {
       return this.state.fuse.search(searchValue)
     } else {

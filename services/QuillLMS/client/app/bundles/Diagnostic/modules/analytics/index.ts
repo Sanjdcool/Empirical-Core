@@ -54,7 +54,7 @@ class SegmentAnalytics {
     if (event.requiredProperties) {
       let passedEventProperties = Object.keys(properties);
       event.requiredProperties.forEach((p) => {
-        if (passedEventProperties.indexOf(p) == -1) {
+        if (passedEventProperties.indexOf(p) === -1) {
           throw new Error(`Can not track event "${event.name}" without required property "${p}".`);
         }
       });
@@ -62,7 +62,7 @@ class SegmentAnalytics {
   }
 
   formatCustomProperties(properties: object): object {
-    if (typeof properties != 'object') {
+    if (typeof properties !== 'object') {
       properties = {};
     }
     return Object.keys(properties).reduce((accumulator, key) => {

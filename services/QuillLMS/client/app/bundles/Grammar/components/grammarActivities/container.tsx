@@ -118,7 +118,7 @@ export class PlayGrammarContainer extends React.Component<PlayGrammarContainerPr
 
     const activityUID = getParameterByName('uid', window.location.href)
 
-    if (prevProps.grammarActivities.hasreceiveddata != hasreceiveddata && hasreceiveddata) {
+    if (prevProps.grammarActivities.hasreceiveddata !== hasreceiveddata && hasreceiveddata) {
       document.title = `Quill.org | ${grammarActivities.currentActivity.title}`
     }
 

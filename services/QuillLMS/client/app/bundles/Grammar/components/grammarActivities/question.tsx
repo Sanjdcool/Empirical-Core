@@ -237,7 +237,7 @@ export class QuestionComponent extends React.Component<QuestionProps, QuestionSt
   }
 
   handleKeyDown = (e: any) => {
-    if (e.keyCode == 13 && e.shiftKey == false) {
+    if (e.keyCode === 13 && e.shiftKey === false) {
       e.preventDefault();
       const { questionStatus } = this.state
       if (questionStatus === UNANSWERED || questionStatus === INCORRECTLY_ANSWERED) {

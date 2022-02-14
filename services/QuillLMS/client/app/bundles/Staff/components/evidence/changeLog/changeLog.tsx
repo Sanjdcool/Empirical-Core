@@ -109,9 +109,9 @@ const ChangeLog = ({ history, match }) => {
   })
 
   const filteredRowsByDatePicker = formattedRows && filteredRowsByRule.filter(value => {
-    if (startDate == null && endDate == null) return true
-    if (startDate == null) return Date.parse(value.dateTime) <= Date.parse(endDate.toString())
-    if (endDate == null) return Date.parse(startDate.toString()) <= Date.parse(value.dateTime)
+    if (startDate === null && endDate === null) return true
+    if (startDate === null) return Date.parse(value.dateTime) <= Date.parse(endDate.toString())
+    if (endDate === null) return Date.parse(startDate.toString()) <= Date.parse(value.dateTime)
     return Date.parse(startDate.toString()) <= Date.parse(value.dateTime) && Date.parse(value.dateTime) <= Date.parse(endDate.toString())
   })
 
@@ -184,7 +184,7 @@ const ChangeLog = ({ history, match }) => {
   }
 
   function ruleDropdown() {
-    const rules = _.uniq(formattedRows.filter(a => a.name != null).map((a)=>a.name))
+    const rules = _.uniq(formattedRows.filter(a => a.name !== null).map((a)=>a.name))
     const ruleOptions = rules.map((currentValue, i) => {
       return <option key={currentValue} value={currentValue}>{currentValue}</option>
     })

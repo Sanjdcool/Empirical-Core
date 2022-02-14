@@ -51,7 +51,7 @@ export default class extends React.Component {
 
   handleInstructionsChange = (e) => {
     this.setState({instructions: e.target.value})
-    if (e.target.value == '/') {
+    if (e.target.value === '/') {
       this.setState({ showDefaultInstructions: true})
     } else {
       this.setState({ showDefaultInstructions: false})

@@ -17,55 +17,54 @@ export default  function () {
     )
   }
 
-  var _dataIntoParam = function (data) {
+  const _dataIntoParam = function (data) {
     data.authenticity_token = _authenticity_token()
     return {data: data}
   }
 
-  var _paramAdder = function (fn) {
-    var hash = fn.apply(null, _.rest(arguments));
+  const _paramAdder = function (fn) {
+    let hash = fn.apply(null, _.rest(arguments));
     return function (params) {
-      var result = _.extend({}, params, hash)
+      let result = _.extend({}, params, hash)
       return result
     }
   }
 
-  var _paramAdder2 = function (fn) {
+  const _paramAdder2 = function (fn) {
     return function (params) {
-      var hash = fn.apply(null, [params]);
+      let hash = fn.apply(null, [params]);
       return _.extend({}, params, hash)
     }
   }
 
-  var _defaultCallback = function (data) {}
-  var _callbackParam = function (callback) {
-    var callback = (callback? callback : _defaultCallback)
-    return {success: callback}
+  let _defaultCallback = function (data) {}
+  const _callbackParam = function (callback) {
+    return {success: callback? callback : _defaultCallback}
   }
 
-  var _dataType = function () {
+  const _dataType = function () {
     return {dataType: 'json'}
   }
 
-  var _urlParam = function (id, resourceNamePlural, urlPrefix) {
-    var suffix = id ? ('/' + id) : null;
-    var url = [urlPrefix, '/', resourceNamePlural, suffix].join('');
+  const _urlParam = function (id, resourceNamePlural, urlPrefix) {
+    let suffix = id ? ('/' + id) : null;
+    let url = [urlPrefix, '/', resourceNamePlural, suffix].join('');
     return {url: url}
   }
 
-  var _typeParam = function (id) {
-    var type = id ? 'PUT' : 'POST'
+  const _typeParam = function (id) {
+    let type = id ? 'PUT' : 'POST'
     return {type: type}
   }
 
-  var _authenticity_token = function() {
+  const _authenticity_token = function() {
     return $('meta[name=csrf-token]').attr('content');
   }
 
 
-  var _paramsForFormOrNot = function (params) {
-    var extras
-    var dataObj = params.data // data is of the form {resourceNameSingular: hash | FormData}
+  const _paramsForFormOrNot = function (params) {
+    let extras
+    let dataObj = params.data // data is of the form {resourceNameSingular: hash | FormData}
     if (dataObj instanceof FormData) {
       extras = {processData: false, contentType: false}
     } else {

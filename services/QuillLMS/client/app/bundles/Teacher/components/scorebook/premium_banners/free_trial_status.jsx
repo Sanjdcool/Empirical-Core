@@ -2,11 +2,11 @@ import React from 'react'
 
 export default class extends React.Component {
   stateSpecificComponents = () => {
-    if (this.props.status == 'trial') {
+    if (this.props.status === 'trial') {
       return (
         <h4>You have {this.props.data} days left in your trial.</h4>
       );
-    } else if (this.props.status == 'locked') {
+    } else if (this.props.status === 'locked') {
       return (
         <h4>Your Premium Trial Has Expired</h4>
       );
@@ -15,7 +15,7 @@ export default class extends React.Component {
 
   render() {
     const { originPage, upgradeNow } = this.props
-    const premiumButton = originPage == 'premium' ?
+    const premiumButton = originPage === 'premium' ?
       (
         <button className='btn-orange' onClick={upgradeNow} type='button'>Upgrade to Premium Now</button>
       ) :

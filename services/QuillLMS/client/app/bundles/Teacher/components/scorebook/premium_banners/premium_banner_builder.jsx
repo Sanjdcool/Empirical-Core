@@ -20,7 +20,7 @@ export default class PremiumBannerBuilder extends React.Component {
   }
 
   fetchData = () => {
-    var that = this;
+    let that = this;
     $.get('/teachers/classrooms/premium')
       .done(function(data) {
         that.setState({
@@ -60,7 +60,7 @@ export default class PremiumBannerBuilder extends React.Component {
   };
 
   stateSpecificBackGroundColor = () => {
-    if (this.props.daysLeft == 30){
+    if (this.props.daysLeft === 30){
       return('#d0ffc6');
     } else {
       return('#ffe7c0');
@@ -68,7 +68,7 @@ export default class PremiumBannerBuilder extends React.Component {
   };
 
   stateSpecificBackGroundImage = () => {
-    if (this.props.daysLeft == 30){
+    if (this.props.daysLeft === 30){
       return('none');
     } else {
       return('url(/images/star_pattern_5.png)');
@@ -76,9 +76,9 @@ export default class PremiumBannerBuilder extends React.Component {
   };
 
   hasPremium = () => {
-    var color = this.stateSpecificBackGroundColor();
-    var img = this.stateSpecificBackGroundImage();
-    var divStyle = {
+    let color = this.stateSpecificBackGroundColor();
+    let img = this.stateSpecificBackGroundImage();
+    let divStyle = {
       backgroundColor: color,
       backgroundImage: img
     };

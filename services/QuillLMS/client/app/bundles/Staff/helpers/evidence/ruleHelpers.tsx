@@ -192,7 +192,7 @@ export function renderHighlights(highlights, i, changeHandler) {
       const { highlight_type } = highlight;
       highlightTypeValue = highlight_type;
     }
-    const passageMismatch = (highlight.highlight_type == 'passage' && !highlight.valid_in_all_targets)
+    const passageMismatch = (highlight.highlight_type === 'passage' && !highlight.valid_in_all_targets)
     return(
       <section className="rule-highlight-section" key={j}>
         <p className="form-subsection-label">{`${numericalWordOptions[i]} Revision - ${numericalWordOptions[j]} Highlight`}</p>
