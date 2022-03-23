@@ -139,7 +139,8 @@ gem 'rack-host-redirect'
 gem 'rack-affiliates', '= 0.4.0'
 
 # DEPLOYMENT
-gem 'sentry-raven', '>= 0.12.2'
+gem 'sentry-ruby'
+gem 'sentry-rails'
 gem 'rack-heartbeat'
 
 # INTEGRATIONS
