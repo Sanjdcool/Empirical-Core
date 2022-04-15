@@ -4,14 +4,14 @@ module Evidence
   module Check
     ALL_CHECKS = [
       Prefilter,
-      RegexSentence,
+      #RegexSentence,
       Opinion,
       Plagiarism,
-      AutoML,
+      #AutoML,
       RegexPostTopic,
       Grammar,
       Spelling,
-      RegexTypo
+      #RegexTypo
     ]
 
     FALLBACK_RESPONSE = {
