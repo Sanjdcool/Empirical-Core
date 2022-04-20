@@ -101,3 +101,5 @@ RSpec.describe Demo::ReportDemoCreator do
     expect(act_sesh.concept_results.first.metadata).to eq(temp.concept_results.first.metadata)
   end
 end
+
+
