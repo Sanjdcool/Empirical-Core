@@ -8,6 +8,9 @@ export function sortByLastName(fullName1, fullName2){
 }
 
 export function sortTableByLastName(row1, row2, key) {
+  console.log(row1)
+  console.log(row2)
+  console.log(key)
   const lastName1 = _.last(row1.original[key].split(' '))
   const lastName2 = _.last(row2.original[key].split(' '))
   return sort(lastName1, lastName2);
