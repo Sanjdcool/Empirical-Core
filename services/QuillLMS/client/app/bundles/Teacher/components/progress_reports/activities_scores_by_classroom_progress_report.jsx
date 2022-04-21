@@ -11,7 +11,7 @@ import { PROGRESS_REPORTS_SELECTED_CLASSROOM_ID, } from './progress_report_const
 
 import ItemDropdown from '../general_components/dropdown_selectors/item_dropdown'
 import LoadingSpinner from '../shared/loading_indicator.jsx'
-import {sortTableByLastName, sortFromSQLTimeStamp} from '../../../../modules/sortingMethods.js'
+import { sortTableByLastName, sortFromSQLTimeStamp } from '../../../../modules/sortingMethods'
 import { getTimeSpent } from '../../helpers/studentReports';
 import { ReactTable, } from '../../../Shared/index'
 
@@ -61,9 +61,12 @@ export class ActivitiesScoresByClassroomProgressReport extends React.Component {
         accessor: 'name',
         resizable: false,
         sortMethod: sortTableByLastName,
-        Cell: ({row}) => (<a className='row-link-disguise underlined' href={`/teachers/progress_reports/student_overview?classroom_id=${row.original.classroom_id}&student_id=${row.original.student_id}`}>
-          {row.original.name}
-        </a>),
+        minWidth: 110,
+        Cell: ({row}) => (
+          <a className='row-link-disguise underlined' href={`/teachers/progress_reports/student_overview?classroom_id=${row.original['classroom_id']}&student_id=${row.original['student_id']}`}>
+            {row.original['name']}
+          </a>
+        )
       }, {
         Header: "Activities completed",
         accessor: 'activity_count',
