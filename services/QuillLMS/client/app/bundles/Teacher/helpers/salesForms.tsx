@@ -1,4 +1,6 @@
 import * as React from 'react';
+import SelectSearch from 'react-select-search';
+import Fuse from 'fuse.js';
 
 import { DropdownInput, Input, Spinner } from '../../Shared';
 import { requestFailed } from "../../Staff/helpers/evidence/routingHelpers";
@@ -30,6 +32,42 @@ const headerHash = {
 };
 const apiFetch = fetchDefaults(fetch, baseUrl, headerHash);
 
+export function schoolSearch(options) {
+  const fuse = new Fuse(options, {
+    keys: ['name', 'groupName', 'items.name'],
+    threshold: 0.3,
+  });
+
+  return (value) => {
+    if (!value.length) {
+      return options;
+    }
+    const results = fuse.search(value)
+    if(value && !results.length) {
+      return [{ name: SCHOOL_NOT_LISTED, value: SCHOOL_NOT_LISTED}];
+    }
+    return fuse.search(value);
+  };
+}
+
+export const districtSearch = (options) => {
+  const fuse = new Fuse(options, {
+    keys: ['name', 'groupName', 'items.name'],
+    threshold: 0.3,
+  });
+
+  return (value) => {
+    if (!value.length) {
+      return options;
+    }
+    const results = fuse.search(value)
+    if(value && !results.length) {
+      return [{ name: DISTRICT_NOT_LISTED, value: DISTRICT_NOT_LISTED}];
+    }
+    return fuse.search(value);
+  };
+}
+
 export const getSchoolsAndDistricts = async (type: string) => {
   const url = `/options_for_sales_form?type=${type}`;
   const response = await apiFetch(url);
@@ -40,7 +78,7 @@ export const getSchoolsAndDistricts = async (type: string) => {
   } else {
     const schoolOrDistrictOptions = await response.json();
     const { options } = schoolOrDistrictOptions;
-    const formattedOptions = options.map((option: string) => ({ label: option, value: option }));
+    const formattedOptions = options.map((option: string) => ({ name: option, value: option }));
     return { options: formattedOptions };
   }
 }
@@ -84,30 +122,24 @@ export const renderSchoolAndDistrictSelect = ({
   handleSchoolSearchChange,
   handleDistrictSearchChange
 }) => {
-  const schoolInputLabel = selectedSchool ? SCHOOL : "Search for your school";
-  const districtInputLabel = selectedDistrict ? DISTRICT : "Search for your district";
-  const schoolOptions = [{ label: SCHOOL_NOT_LISTED, value: SCHOOL_NOT_LISTED}, ...schools];
-  const districtOptions = [{ label: DISTRICT_NOT_LISTED, value: DISTRICT_NOT_LISTED}, ...schools];
   const schoolSearchInput = (
-    <DropdownInput
-      className="form-input"
-      filterOptions={customSearch}
-      handleChange={handleSchoolSearchChange}
-      isSearchable={true}
-      label={schoolInputLabel}
-      options={schoolOptions}
-      value={selectedSchool}
+    <SelectSearch
+      filterOptions={schoolSearch}
+      onChange={handleSchoolSearchChange}
+      options={schools}
+      placeholder="Search for your school"
+      search={true}
+      value={selectedSchool ? selectedSchool : ''}
     />
   );
   const districtSearchInput = (
-    <DropdownInput
-      className="form-input"
-      filterOptions={customSearch}
-      handleChange={handleDistrictSearchChange}
-      isSearchable={true}
-      label={districtInputLabel}
-      options={districtOptions}
-      value={selectedDistrict}
+    <SelectSearch
+      filterOptions={districtSearch}
+      onChange={handleDistrictSearchChange}
+      options={districts}
+      placeholder="Search for your district"
+      search={true}
+      value={selectedDistrict ? selectedDistrict : ''}
     />
   );
   const schoolCustomInput = (

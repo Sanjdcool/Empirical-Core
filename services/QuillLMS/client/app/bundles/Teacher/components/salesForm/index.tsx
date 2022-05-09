@@ -84,21 +84,22 @@ export const SalesForm = ({ type }) => {
     setterFunction(value);
   }
 
-  function handleSchoolSearchChange(option) {
-    if(option.value === SCHOOL_NOT_LISTED) {
+  function handleSchoolSearchChange(value) {
+    console.log("🚀 ~ file: index.tsx ~ line 88 ~ handleSchoolSearchChange ~ value", value)
+    if(value === SCHOOL_NOT_LISTED) {
       setSchoolNotListed(true);
       setSelectedSchool('');
     } else {
-      setSelectedSchool(option);
+      setSelectedSchool(value);
     }
   };
 
-  function handleDistrictSearchChange(option) {
-    if(option.value === DISTRICT_NOT_LISTED) {
+  function handleDistrictSearchChange(value) {
+    if(value === DISTRICT_NOT_LISTED) {
       setDistrictNotListed(true);
       setSelectedDistrict('');
     } else {
-      setSelectedDistrict(option);
+      setSelectedDistrict(value);
     }
   };
 
@@ -111,8 +112,8 @@ export const SalesForm = ({ type }) => {
       phone_number: phoneNumber,
       zipcode: zipcode,
       collection_type: schoolOrDistrict.toLowerCase(),
-      school_name: selectedSchool && selectedSchool.value ? selectedSchool.value : selectedSchool,
-      district_name: selectedDistrict && selectedDistrict.value ? selectedDistrict.value : selectedDistrict,
+      school_name: selectedSchool,
+      district_name: selectedDistrict,
       school_premium_count_estimate: parseInt(schoolPremiumEstimate),
       teacher_premium_count_estimate: parseInt(teacherPremiumEstimate),
       student_premium_count_estimate: parseInt(studentPremiumEstimate),
